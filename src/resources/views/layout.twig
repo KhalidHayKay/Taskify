@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <title>Dashboard</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {{ encore_entry_link_tags('layout') }}
+    {% endblock %}
+</head>
+<body class="bg-[#ddd] h-[100vh] px-5 lg:px-[5rem]">
+    <header class="flex py-3.5">
+        <div id="logo" class="w-1/4">
+            <a class="flex items-center text-gray-700 text-base sm:text-2xl xl:text-3xl tracking-wider no-underline hover:no-underline font-bold" href="">
+                <img class="w-8 h-8 sm:w-12 sm:h-12 lg:w-[3rem] lg:h-[3.3rem]" src="{{ asset('build/images/logo.png') }}" alt="logo">
+                <span class="ml-[-5px] lg:ml-[-5px] italic">Task<span class="text-blue-700">ify</span></span>
+            </a>
+        </div>
+
+        <div class="w-3/4 flex items-center justify-end sm:justify-normal">
+            {# Nav Anchor #}
+            <nav class="flex-grow sm:flex lg:items-center sm:w-auto hidden" id="nav-content">
+                <ul class="list-reset sm:flex flex-1 items-center sm:justify-end px-4 sm:px-0">
+                    <li class="mr-6 my-2 md:my-0 lg:text-xl">
+                        <a href="/" class="block py-1 md:py-3 pl-1 align-middle {# text-gray-500 #}  text-gray-900 no-underline hover:text-gray-900 transition">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="mr-6 my-2 md:my-0 lg:text-lg">
+                        <a href="/tasks" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition">
+                            Tasks
+                        </a>
+                    </li>
+                    <li class="mr-6 my-2 md:my-0 lg:text-lg">
+                        <a href="/categories" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition">
+                            Categories
+                        </a>
+                    </li>
+                </ul>
+            </nav>     
+
+            <div id="user" class="">
+                <button id="userButton" class="flex items-center focus:outline-none mr-3">
+                    {# <i class=" rounded-full bg-white ml-2"> #}<img class="w-7 h-7 rounded-full" src="{{ asset('build/images/avatar.png') }}" alt="Avatar of User"> {# </i> #} <span class="hidden md:inline-block lg:text-[1rem]"> {{ username }} </span>
+                </button>
+                <div id="userMenu" class="bg-white rounded shadow-md mt-2 absolute sm:mt-14 sm:mr-6 lg:mt-16 lg:mr-20 top-0 right-0 w-fit overflow-auto z-30 invisible">
+                    <ul class="list-reset">
+                        <li><a href="#" class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">My account</a></li>
+                        <li>
+                            <hr class="border-t mx-2 border-gray-400">
+                        </li>
+                        <li>
+                            <form action="/logout" method="POST" href="#" class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">
+                                <button>Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="block sm:hidden pr-4">
+                <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-900 hover:border-teal-500 appearance-none focus:outline-none">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <title>Menu</title>
+                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <main class="h-[80vh] rounded-lg overflow-hidden">
+        {% block content %} {% endblock %}
+    </main>
+    
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('layout')}}
+    {% endblock %}
+</body>
+</html>

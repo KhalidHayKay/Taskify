@@ -1,0 +1,34 @@
+{% extends "auth/layout.twig" %}
+
+{% block title %} Log In {% endblock %}
+
+{% block form_for %} Sign in to your account. {% endblock %}
+
+{% block form_content %}
+    <form class="flex flex-col" method="POST" action="/login">
+        <div class="pt-3 rounded bg-gray-200">
+            <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+            <input type="text" id="email" name="email" value="{{ oldFormData.email }}" 
+                class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-2 
+                {{ validationErrors.email ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-purple-600'}} 
+                transition duration-400 px-3 pb-1">
+        </div>
+        <span class="text-red-500 text-[0.75rem] ml-2 mb-6">{{ validationErrors.email | first }}</span>
+        <div class="pt-3 rounded bg-gray-200">
+            <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
+            <input type="password" id="password" name="password" 
+                class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-2 
+                {{ validationErrors.password ? 'border-red-400 focus:border-red-500' : 'border-gray-300 focus:border-purple-600'}} 
+                transition duration-400 px-3 pb-1">
+        </div>
+        <span class="text-red-500 text-[0.75rem] ml-2 mb-6">{{ validationErrors.password | first }}</span>
+        <div class="flex justify-end">
+            <a href="#" class="text-sm text-purple-600 hover:text-purple-700 hover:underline mb-6">Forgot your password?</a>
+        </div>
+        <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200" type="submit">Sign In</button>
+    </form>
+{% endblock %}
+
+{% block form_switch_message %}
+    <p class="text-white">Don't have an account? <a href="/signup" class="font-bold hover:underline">Sign up</a>.</p>
+{% endblock %}

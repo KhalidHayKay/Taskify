@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        {{ encore_entry_link_tags('auth_layout') }}
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('auth_layout') }}
+    {% endblock %}
+    
+    <title>{% block title %} Auth {% endblock %}</title>
+</head>
+<body class="body-bg min-h-screen pt-12 md:pt-14 pb-10 px-2 md:px-0">
+    <header class="max-w-lg mx-auto">
+        <a href="" class=" flex items-center justify-center">
+            <img class="w-14 h-14" src="{{ asset('build/images/logo.png') }}" alt="logo">
+            <h1 class="text-4xl font-bold text-gray-100 text-center italic">Task<span class="text-purple-800">ify</span></h1>
+        </a>
+    </header>
+
+    <main class="bg-white max-w-lg mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+        <section>
+            <h3 class="font-bold text-gray-600 text-xl">{% block form_for %} {% endblock %}</h3>
+        </section>
+
+        <section class="mt-10">
+            {% block form_content %}
+                
+            {% endblock %}
+        </section>
+    </main>
+
+    <div class="max-w-lg mx-auto text-center mt-12 mb-6">
+        {% block form_switch_message %} {% endblock %}
+    </div>
+
+    <footer class="max-w-lg mx-auto flex justify-center text-white">
+        <a href="#" class="hover:underline">Contact</a>
+        <span class="mx-3">•</span>
+        <a href="#" class="hover:underline">About</a>
+    </footer>
+</body>
+</html>

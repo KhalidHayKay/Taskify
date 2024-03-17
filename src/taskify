@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\Migrations\DependencyFactory;
+use Symfony\Component\Console\Application;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\Migrations\Configuration\Migration\PhpFile;
+use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+$container = require 'boostrap.php';
+
+$config = new PhpFile(CONFIG_PATH . '/migrations.php');
+$entityManager = $container->get(EntityManager::class);
+
+$dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
+
+$migrationCommands = require CONFIG_PATH . '/commands/migrations_command.php';
+$customCommands = require CONFIG_PATH . '/commands/commands.php';
+
+$application = new Application('Taskify Command Line Interface', '1.0');
+
+ConsoleRunner::addCommands($application, new SingleManagerProvider($entityManager));
+
+$application->addCommands($migrationCommands($dependencyFactory));
+$application->addCommands(array_map(fn($command) => $container->get($command), $customCommands));
+
+$application->run();
