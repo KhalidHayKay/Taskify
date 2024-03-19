@@ -22,6 +22,7 @@ use Doctrine\DBAL\DriverManager;
 use Symfony\Component\Asset\Package;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
 use Symfony\Component\Asset\Packages;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -87,4 +88,5 @@ return [
     AuthInterface::class => fn(ContainerInterface $container) => $container->get(Auth::class),
     UserInterface::class => fn(ContainerInterface $container) => $container->get(User::class),
     UserProviderInterface::class => fn(ContainerInterface $container) => $container->get(UserProviderService::class),
+    'csrf' => fn(ResponseFactoryInterface $responseFactory) => new Guard($responseFactory, persistentTokenMode: true),
 ];

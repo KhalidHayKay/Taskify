@@ -6,6 +6,8 @@
 
 {% block form_content %}
     <form class="flex flex-col" method="POST" action="/signup">
+        {{ csrf_form | raw}}
+        
         <div class=" pt-3 rounded bg-gray-200">
             <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="fullname">Full name</label>
             <input type="text" id="fullname" name="fullname" value="{{ oldFormData.fullname }}"

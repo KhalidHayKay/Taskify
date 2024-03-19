@@ -53,6 +53,7 @@
                         </li>
                         <li>
                             <form action="/logout" method="POST" href="#" class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">
+                                {{ csrf_form | raw}}
                                 <button>Logout</button>
                             </form>
                         </li>
