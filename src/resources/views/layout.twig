@@ -13,9 +13,9 @@
 <body class="bg-[#ddd] h-[100vh] px-5 lg:px-[5rem]">
     <header class="flex py-3.5">
         <div id="logo" class="w-1/4">
-            <a class="flex items-center text-gray-700 text-base sm:text-2xl xl:text-3xl tracking-wider no-underline hover:no-underline font-bold" href="">
-                <img class="w-8 h-8 sm:w-12 sm:h-12 lg:w-[3rem] lg:h-[3.3rem]" src="{{ asset('build/images/logo.png') }}" alt="logo">
-                <span class="ml-[-5px] lg:ml-[-5px] italic">Task<span class="text-blue-700">ify</span></span>
+            <a class="flex items-center text-gray-700 text-base sm:text-2xl xl:text-4xl tracking-wider no-underline hover:no-underline font-bold" href="">
+                <img class="w-8 h-8 sm:w-12 sm:h-12 lg:w-[3rem]" src="{{ asset('build/images/logo.png') }}" alt="logo">
+                <span class="ml-[-5px] lg:ml-[-5px]">Task<span class="text-blue-700">ify</span></span>
             </a>
         </div>
 
@@ -23,18 +23,18 @@
             {# Nav Anchor #}
             <nav class="flex-grow sm:flex lg:items-center sm:w-auto hidden" id="nav-content">
                 <ul class="list-reset sm:flex flex-1 items-center sm:justify-end px-4 sm:px-0">
-                    <li class="mr-6 my-2 md:my-0 lg:text-xl">
-                        <a href="/" class="block py-1 md:py-3 pl-1 align-middle {# text-gray-500 #}  text-gray-900 no-underline hover:text-gray-900 transition">
+                    <li class="mr-6 my-2 md:my-0 lg:text-[21px]">
+                        <a href="/" class="block py-1 md:py-3 pl-1 align-middle {# text-gray-500 #}  text-gray-700 no-underline hover:text-gray-700 transition  duration-300 ease-out">
                             Dashboard
                         </a>
                     </li>
-                    <li class="mr-6 my-2 md:my-0 lg:text-lg">
-                        <a href="/tasks" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition">
+                    <li class="mr-6 my-2 md:my-0 lg:text-xl">
+                        <a href="/tasks" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition duration-300 ease-out">
                             Tasks
                         </a>
                     </li>
-                    <li class="mr-6 my-2 md:my-0 lg:text-lg">
-                        <a href="/categories" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition">
+                    <li class="mr-6 my-2 md:my-0 lg:text-xl">
+                        <a href="/categories" class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-900 transition duration-300 ease-out">
                             Categories
                         </a>
                     </li>
@@ -43,7 +43,9 @@
 
             <div id="user" class="">
                 <button id="userButton" class="flex items-center focus:outline-none mr-3">
-                    {# <i class=" rounded-full bg-white ml-2"> #}<img class="w-7 h-7 rounded-full" src="{{ asset('build/images/avatar.png') }}" alt="Avatar of User"> {# </i> #} <span class="hidden md:inline-block lg:text-[1rem]"> {{ username }} </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.8 61.804" width="30" height"30" id="Avatar"><g data-name="Layer 2" fill="#000000" class="color000000 svgShape"><g data-name="—ÎÓÈ 1" fill="#000000" class="color000000 svgShape"><circle cx="30.9" cy="30.9" r="30.9" fill="#82acbb" class="color9f82bb svgShape"></circle><path fill="#a4e2f9" fill-rule="evenodd" d="M23.255 38.68l15.907.121v12.918l-15.907-.121V38.68z" class="colorf9dca4 svgShape"></path><path fill="#ffffff" fill-rule="evenodd" d="M53.478 51.993A30.814 30.814 0 0 1 30.9 61.8a31.547 31.547 0 0 1-9.23-1.402 31.124 31.124 0 0 1-13.626-8.704l1.283-3.1 13.925-6.212c0 4.535 1.519 7.06 7.648 7.153 7.57.113 8.261-2.515 8.261-7.19l12.79 6.282z" class="colorffffff svgShape"></path><path fill-rule="evenodd" d="M39.166 38.778v3.58c0 .297-.004.802-.029 1.273-4.155 5.56-14.31 2.547-15.771-5.053z" opacity=".11" fill="#000000" class="color000000 svgShape"></path><path fill="#beedff" fill-rule="evenodd" d="M31.129 8.432c21.281 0 12.988 35.266 0 35.266-12.266 0-21.281-35.266 0-35.266z" class="colorffe8be svgShape"></path><path fill="#a4e2f9" fill-rule="evenodd" d="M18.365 24.045c-3.07 1.34-.46 7.687 1.472 7.658a31.978 31.978 0 01-1.472-7.658zM44.14 24.045c3.07 1.339.46 7.687-1.471 7.658a31.997 31.997 0 001.471-7.658z" class="colorf9dca4 svgShape"></path><path fill="#42768a" fill-rule="evenodd" d="M22.035 35.1a1.879 1.879 0 0 1-.069-.504v-.005a1.422 1.422 0 0 1 1.22-1.361 1.046 1.046 0 0 0 .907 1.745 4.055 4.055 0 0 0 .981-.27c.293-.134.607-.289.943-.481a13.439 13.439 0 0 0 1.426-1.014 3.04 3.04 0 0 1 1.91-.787 2.015 2.015 0 0 1 1.293.466 2.785 2.785 0 0 1 .612.654 2.77 2.77 0 0 1 .612-.654 2.015 2.015 0 0 1 1.292-.466 3.039 3.039 0 0 1 1.911.787 13.42 13.42 0 0 0 1.426 1.014c.336.192.65.347.943.48a4.054 4.054 0 0 0 .981.271 1.046 1.046 0 0 0 .906-1.745 1.422 1.422 0 0 1 1.22 1.36h.002l-.001.006a1.879 1.879 0 0 1-.069.504c-.78 3.631-7.373 2.769-9.223.536-1.85 2.233-8.444 3.095-9.223-.536z" class="color8a5c42 svgShape"></path><path fill="#444849" fill-rule="evenodd" d="M26.431 5.74h9.504a8.529 8.529 0 0 1 8.504 8.504v6.59H17.927v-6.59a8.529 8.529 0 0 1 8.504-8.504z" class="color464449 svgShape"></path><path fill="#333333" fill-rule="evenodd" d="M12.684 19.828h36.998a1.372 1.372 0 0 1 1.369 1.368 1.372 1.372 0 0 1-1.369 1.37H12.684a1.372 1.372 0 0 1-1.368-1.37 1.372 1.372 0 0 1 1.368-1.368z" class="color333333 svgShape"></path><path fill="#10a9e2" d="M17.927 15.858H44.44v3.97H17.927z" class="color677079 svgShape"></path><path fill="#d5e6ed" fill-rule="evenodd" d="M29.42 48.273v13.49a29.098 29.098 0 003.528-.03v-13.46zM23.255 42.176l6.164 7.281-8.837 2.918-.023-9.023 2.696-1.176zM39.192 42.176l-6.164 7.281 8.838 2.918.022-9.023-2.696-1.176z" class="colord5e1ed svgShape"></path><path fill="#444849" fill-rule="evenodd" d="M24.018 45.933l5.09 1.98a2.581 2.581 0 0 1 4.05.04l5.19-2.02v7.203l-5.193-2.016a2.581 2.581 0 0 1-4.044.039l-5.093 1.977z" class="color464449 svgShape"></path><path fill="#42768a" fill-rule="evenodd" d="M15.115 46.012l3.304-1.474v14.638a34.906 34.906 0 01-3.304-1.706zM46.933 46.163l-3.304-1.625v14.527a31.278 31.278 0 003.304-1.745z" class="color8a5c42 svgShape"></path></g></g></svg>
+                    
+                    <span class="hidden md:inline-block lg:text-[1rem] ml-1"> {{ username }} </span>
                 </button>
                 <div id="userMenu" class="bg-white rounded shadow-md mt-2 absolute sm:mt-14 sm:mr-6 lg:mt-16 lg:mr-20 top-0 right-0 w-fit overflow-auto z-30 invisible">
                     <ul class="list-reset">
