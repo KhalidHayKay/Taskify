@@ -18,8 +18,6 @@ class HomeController
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $user = $this->auth->user();
-
-        return $this->twig->render($response, 'dashboard.twig', ['username' => $user?->getUsername()]);
+        return $this->twig->render($response, 'dashboard.twig');
     }
 }

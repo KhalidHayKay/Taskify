@@ -1,12 +1,30 @@
-html {
-    background-color: #efefef;
-}
+header {
+    grid-template-areas: 'logo nav-content user';
+    align-items: center;
 
-div#logo {
-    font-family: "VT323", monospace;
-    font-weight: 400;
-}
+    @media screen and (max-width: 490px) {
+        grid-template-areas: 
+            'logo user'
+            'nav-content nav-content'
+        ;
+        grid-template-columns: 1fr 1fr;
+    }
 
-nav#nav-content {
-    font-weight: 600;
+    #logo {
+        font-family: "VT323", monospace;
+        font-weight: 400;
+
+        grid-area: logo;
+    }
+
+    #nav-content {
+        font-weight: 600;
+
+        grid-area: nav-content;
+    }
+
+    #user {
+        grid-area: user;
+        justify-self: end;
+    }
 }

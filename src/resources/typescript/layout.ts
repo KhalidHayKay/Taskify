@@ -6,9 +6,6 @@ import '../scss/layout.scss';
 const userMenuDiv = document.getElementById("userMenu");
 const userMenu = document.getElementById("userButton");
 
-const navMenuDiv = document.getElementById("nav-content");
-const navMenu = document.getElementById("nav-toggle");
-
 
 
 document.onclick = check;
@@ -29,21 +26,6 @@ function check(e: { target: any; }) {
             userMenuDiv?.classList.add("invisible");
         }
     }
-
-    //Nav Menu
-    if (!checkParent(target, navMenuDiv)) {
-        // click NOT on the menu
-        if (checkParent(target, navMenu)) {
-            // click on the link
-            if (navMenuDiv?.classList.contains("hidden")) {
-                navMenuDiv?.classList.remove("hidden");
-            } else { navMenuDiv?.classList.add("hidden"); }
-        } else {
-            // click both outside link and outside menu, hide menu
-            navMenuDiv?.classList.add("hidden");
-        }
-    }
-
 }
 
 function checkParent(t: { parentNode: any; }, elm: HTMLElement | null) {
