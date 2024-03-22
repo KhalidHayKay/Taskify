@@ -9,6 +9,11 @@
         {{ encore_entry_link_tags('app') }}
         {{ encore_entry_link_tags('layout') }}
     {% endblock %}
+    
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app', null, '', {defer: true}) }}
+        {{ encore_entry_script_tags('layout', null, '', {defer: true})}}
+    {% endblock %}
 </head>
 <body class="bg-[#f6f6f6] h-[100vh] px-5 lg:px-[5rem]">
     <header class="grid py-2 sm:py-3 lg:py-5">
@@ -45,8 +50,12 @@
                 
                 <span class="hidden sm:inline-block sm:text-[13px] md:text-[14px] lg:text-[1rem] ml-1"> {{ username }} </span>
             </button>
-            <div id="userMenu" class="bg-white rounded shadow-md mt-2 absolute sm:mt-14 sm:mr-6 lg:mt-16 lg:mr-20 top-0 right-0 w-fit overflow-auto z-30 invisible">
+            <div id="userMenu" class="bg-white rounded shadow-md mt-12 mr-6 absolute sm:mt-14 lg:mt-16 lg:mr-20 top-0 right-0 w-fit overflow-auto z-30 invisible">
                 <ul class="list-reset">
+                    <li><a href="#" class="px-4 py-2 block text-[10px] text-gray-900 hover:bg-gray-400 no-underline hover:no-underline sm:hidden">{{ username }}</a></li>
+                    <li class="sm:hidden">
+                        <hr class="border-t mx-2 border-gray-400">
+                    </li>
                     <li><a href="#" class="px-4 py-2 block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">My account</a></li>
                     <li>
                         <hr class="border-t mx-2 border-gray-400">
@@ -65,10 +74,5 @@
     <main class="h-[80vh] rounded-lg overflow-hidden">
         {% block content %} {% endblock %}
     </main>
-    
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-        {{ encore_entry_script_tags('layout')}}
-    {% endblock %}
 </body>
 </html>

@@ -1,5 +1,19 @@
 {% extends "layout.twig" %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('alpine', null, '', {defer: true}) }}
+{% endblock %}
+
 {% block content %}
-    <div id="category-container" class="h-full bg-white"></div>
+    <div id="category-container" class="h-full bg-white">
+        <div x-data="{ isOpen: false }" x-cloak>
+            <button @click="isOpen = !isOpen">Toggle Menu</button>
+            <ul x-show="isOpen">
+                <li>Menu Item 1</li>
+                <li>Menu Item 2</li>
+                <li>Menu Item 3</li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}
