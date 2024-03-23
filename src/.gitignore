@@ -3,4 +3,4 @@ public/build
 storage
 vendor
 .env
-resources/views/bank.twig
+resources/views/safe.twig
