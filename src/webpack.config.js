@@ -24,6 +24,7 @@ Encore
     .addEntry('layout', './resources/typescript/layout.ts')
     .addEntry('auth_layout', './resources/typescript/auth/layout.ts')
     .addEntry('alpine', './resources/typescript/packages/alpine.ts')
+    .addEntry('category', './resources/typescript/category.ts')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

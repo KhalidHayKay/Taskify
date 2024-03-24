@@ -1,0 +1,13 @@
+@import '~tailwindcss/tailwind';
+@import 'packages/alpine';
+
+@import url(https://fonts.googleapis.com/css2?family=VT323&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=VT323&display=swap);
+
+html {
+    background-color: #efefef;
+}
+
+body {
+    font-family: "Kode Mono", monospace;
+}
