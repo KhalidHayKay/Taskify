@@ -17,3 +17,8 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555; /* Color of the thumb on hover */
 }
+
+
+.container {
+    max-height: calc(80vh - 70px) !important;
+}
