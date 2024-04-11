@@ -1,3 +1,3 @@
 # TASKIFY ~ Task schedular app.
 
-Currently serving from 'apache-xampp' and 'docker-nginx.
+Currently servable with 'apache-xampp' and 'docker-nginx.

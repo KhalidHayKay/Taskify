@@ -23,7 +23,6 @@ class InvalidCredentialsExceptionMiddleware implements MiddlewareInterface
         try {
             return $handler->handle($request);
         } catch (InvalidCredentialsException $e) {
-            var_dump($e->errors);
             $response = $this->responseFactory->createResponse();
             $referer = $request->getServerParams()['HTTP_REFERER'];
             $sensitiveData = ['password', 'confirm_password'];

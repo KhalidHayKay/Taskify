@@ -45,18 +45,14 @@ return [
 
         return $app;
     },
-    Config::class => fn() => new config($_ENV),
-    EntityManager::class => function(Config $config) {
-        $paths = [__DIR__ . '/../../app/Entity'];
-        $isDevMode = false;
-
-        $ormConfig = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
-        $connection = DriverManager::getConnection($config->get('db'), $ormConfig);
-        
-        return new EntityManager($connection, $ormConfig);
-    },
-
-
+    Config::class => fn() => new config(require_once CONFIG_PATH . '/app.php'),
+    EntityManager::class => fn(Config $config) => new EntityManager(
+        DriverManager::getConnection($config->get('doctrine.connection')),
+        ORMSetup::createAttributeMetadataConfiguration(
+            $config->get('doctrine.entity_dir'), 
+            $config->get('doctrine.dev_mode')
+        )
+    ),
     Twig::class => function(ContainerInterface $container, Config $config) {
         $twig = Twig::create(VIEWS_PATH, [
             'cache' => STORAGE_PATH . '/cache/templates',
