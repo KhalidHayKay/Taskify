@@ -8,7 +8,6 @@ document.querySelector('#modal')?.addEventListener('click', (e) => {
     e.preventDefault();
     const dispacher = e.target as Node;
     if (dispacher.textContent === 'Save') {
-        console.log('Hit Target');
         const name = document.querySelector('input[name=category]') as HTMLInputElement;
 
         fetch('/categories/add', {
