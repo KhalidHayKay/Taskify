@@ -10,6 +10,7 @@ use App\Middlewares\TwigGlobalVariablesMiddleware;
 use App\Middlewares\ValidationErrorsMIddleware;
 use Psr\Container\ContainerInterface;
 use Slim\App;
+use Slim\Middleware\BodyParsingMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
@@ -22,4 +23,5 @@ return function(App $app, ContainerInterface $container) {
     $app->add(OldFormDataMiddleware::class);
     $app->add(ValidationErrorsMIddleware::class);
     $app->add(SessionStartSessionMiddleware::class);
+    $app->add(BodyParsingMiddleware::class);
 };

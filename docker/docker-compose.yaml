@@ -12,6 +12,8 @@ services:
     container_name: taskify-app
     restart: always
     working_dir: /var/www/
+    environment:
+      - TZ=Africa/Lagos
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:

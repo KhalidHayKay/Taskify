@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedAt;
 use App\Interfaces\UserInterface;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -52,11 +53,7 @@ class User implements UserInterface
     #[OneToMany(targetEntity: Task::class, mappedBy: 'user')]
     private Collection $tasks;
 
-	#[PrePersist]
-	public function makeCreatedAt()
-	{
-		$this->createdAt = new DateTime(date('d-m-Y h:i A'));
-	}
+	use CreatedAt;
 
     public function __construct()
     {

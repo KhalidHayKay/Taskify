@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="csrf-name-field" name={{ csrf.keys.name }} content={{ csrf.name }}>
+    <meta id="csrf-value-field" name={{ csrf.keys.value }} content={{ csrf.value }}>
     <title>{% block title %}Taskify{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('build/images/logo.png') }}">
     {% block stylesheets %}

@@ -34,6 +34,9 @@ class Session implements SessionInterface
             session_name($this->options->name);
         }
 
+        // Not ideal. Proper solution will be created later.
+        // date_default_timezone_set('Africa/Lagos');
+
         if (! session_start()) {
             throw new SessionException('Unable to start sesssion');
         }
