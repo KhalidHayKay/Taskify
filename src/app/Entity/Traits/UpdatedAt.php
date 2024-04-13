@@ -13,6 +13,5 @@ trait UpdatedAt
 	public function makeUpdatedAt()
 	{
         $this->updatedAt = new DateTime(date('d-m-Y h:i A'));
-        var_dump($this->updatedAt);
 	}
 }

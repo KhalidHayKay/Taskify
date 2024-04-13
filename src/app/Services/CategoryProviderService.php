@@ -13,7 +13,7 @@ class CategoryProviderService
     {
     }
     
-    public function create(string $name, User $user): Category
+    public function create(string $name, User $user): array
     {
         $category = new Category;
 
@@ -23,7 +23,7 @@ class CategoryProviderService
         $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        return $category;
+        return $this->getAll($user);
     }
 
     public function getAll(User $user): array
@@ -49,6 +49,15 @@ class CategoryProviderService
         $category = $this->entityManager->find(Category::class, $id);
 
         $this->entityManager->remove($category);
+        $this->entityManager->flush();
+    }
+
+    public function edit(int $id, string $name)
+    {
+        $category = $this->entityManager->find(Category::class, $id);
+
+        $category->setName($name);
+
         $this->entityManager->flush();
     }
 }

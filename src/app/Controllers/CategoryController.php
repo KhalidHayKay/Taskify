@@ -39,20 +39,38 @@ class CategoryController
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        var_dump($request->getParsedBody());
         $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
 
-        $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
+        $cats = $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
 
-        return $response->withHeader('Content-Type', 'Application/Json')->withStatus(200);
+        // $response->getBody()->write(json_encode([
+        //     $category->getName(),
+        //     $category->getCreatedAt(),
+        //     $category->getUpdatedAt(),
+        //     $category->getId(),
+        //     $category->getTasks()->count(),
+        // ]));
+
+        $response->getBody()->write(json_encode($cats));
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
     public function remove(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
+        $data = $request->getParsedBody();
 
-        $this->categoryProvider->delete($data['id']);
+        $this->categoryProvider->delete((int) $data['id']);
 
-        return $response->withHeader('Content-Type', 'Application/Json')->withStatus(200);
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+
+    public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $data = $request->getParsedBody();
+
+        $this->categoryProvider->edit((int) $data['id'], $data['name']);
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 }

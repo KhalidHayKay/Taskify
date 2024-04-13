@@ -13,7 +13,8 @@ return function(App $app) {
     $app->get('/categories', [CategoryController::class, 'index'])->add(AuthMiddleware::class);
     $app->get('/categories/all', [CategoryController::class, 'retrieveAll'])->add(AuthMiddleware::class);
     $app->post('/categories/add', [CategoryController::class, 'new'])->add(AuthMiddleware::class);
-    $app->post('/categories/delete', [CategoryController::class, 'remove'])->add(AuthMiddleware::class);
+    $app->delete('/categories/delete', [CategoryController::class, 'remove'])->add(AuthMiddleware::class);
+    $app->put('/categories/update', [CategoryController::class, 'update'])->add(AuthMiddleware::class);
     $app->get('/tasks', [TaskController::class, 'index'])->add(AuthMiddleware::class);
 
     $app->get('/login', [AuthController::class, 'loginView'])->add(GuestMiddleware::class);

@@ -1,67 +1,55 @@
-// const ajax = (
-//     url: string, 
-//     method?: string | null | undefined, 
-//     data: {} | null | undefined = {}, 
-//     domElement = null
-// ) => {
-//     method = method.toLowerCase()
+const ajax = (
+    url: string, 
+    method?: string, 
+    data?: {},
+    // domElement = null
+) => {
+    if (! method) {
+        method = 'get';
+    }
 
-//     let options = {
-//         method,
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-Requested-With': 'XMLHttpRequest'
-//         }
-//     }
+    let options;
 
-//     const csrfMethods = new Set(['post', 'put', 'delete', 'patch'])
+    const csrfMethods = new Set(['post', 'put', 'delete', 'patch'])
 
-//     if (csrfMethods.has(method)) {
-//         let additionalFields = {...csrf()}
+    if (csrfMethods.has(method)) {
+        options = {
+            method: method.toUpperCase(),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({...data, ...csrf()})
+        }
+    } else if (method === 'get') {
+        url += '?' + (new URLSearchParams(data)).toString();
+    }
 
-//         if (method !== 'post') {
-//             options.method = 'post'
+    return fetch(url, options).then(response => {
+        // if (domElement) {
+        //     clearValidationErrors(domElement)
+        // }
 
-//             additionalFields._METHOD = method.toUpperCase()
-//         }
+        if (! response.ok) {
+            if (response.status === 422) {
+                response.json().then(errors => {
+                    // handleValidationErrors(errors, domElement)
+                    console.log(errors);
+                })
+            } else if (response.status === 404) {
+                alert(response.statusText)
+            }
+        }
 
-//         if (data instanceof FormData) {
-//             for (const additionalField in additionalFields) {
-//                 data.append(additionalField, additionalFields[additionalField])
-//             }
+        return response
+    })
+}
 
-//             delete options.headers['Content-Type'];
-
-//             options.body = data
-//         } else {
-//             options.body = JSON.stringify({...data, ...additionalFields})
-//         }
-//     } else if (method === 'get') {
-//         url += '?' + (new URLSearchParams(data)).toString();
-//     }
-
-//     return fetch(url, options).then(response => {
-//         if (domElement) {
-//             clearValidationErrors(domElement)
-//         }
-
-//         if (! response.ok) {
-//             if (response.status === 422) {
-//                 response.json().then(errors => {
-//                     handleValidationErrors(errors, domElement)
-//                 })
-//             } else if (response.status === 404) {
-//                 alert(response.statusText)
-//             }
-//         }
-
-//         return response
-//     })
-// }
-
-// const get  = (url: string, data: {}) => ajax(url, 'get', data)
+const get  = (url: string) => ajax(url);
+const post = (url: string, data: {}) => ajax(url, 'post', data);
+const put = (url: string, data: {}) => ajax(url, 'put', data);
 // const post = (url: string, data: {}, domElement) => ajax(url, 'post', data, domElement)
-// const del  = (url: string, data: {}) => ajax(url, 'delete', data)
+const del  = (url: string, data: {}) => ajax(url, 'delete', data);
 
 // function handleValidationErrors(errors, domElement) {
 //     for (const name in errors) {
@@ -88,19 +76,20 @@
 //     })
 // }
 
-// const csrf = () => {
-//     const nameField = document.querySelector('#csrf-name-field') as HTMLMetaElement;
-//     const valueField = document.querySelector('#csrf-value-field') as HTMLMetaElement;
+const csrf = () => {
+    const nameField = document.querySelector('#csrf-name-field') as HTMLMetaElement;
+    const valueField = document.querySelector('#csrf-value-field') as HTMLMetaElement;
 
-//     return {
-//         [nameField.name]: nameField.content,
-//         [valueField.name]: valueField.content,
-//     };
-// }
+    return {
+        [nameField.name]: nameField.content,
+        [valueField.name]: valueField.content,
+    };
+}
 
-// export {
-//     ajax,
-//     get,
-//     post,
-//     del
-// }
+export {
+    ajax,
+    get,
+    post,
+    del,
+    put,
+}
