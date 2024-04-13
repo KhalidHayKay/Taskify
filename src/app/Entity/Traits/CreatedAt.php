@@ -13,7 +13,7 @@ trait CreatedAt
 	public function makeCreatedAt()
 	{
         if(! isset($this->createdAt)) {
-            $this->createdAt = new DateTime(date('d-m-Y h:i A'));
+            $this->createdAt = new DateTime();
         }
 	}
 }

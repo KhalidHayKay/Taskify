@@ -35,7 +35,7 @@ class Session implements SessionInterface
         }
 
         // Not ideal. Proper solution will be created later.
-        // date_default_timezone_set('Africa/Lagos');
+        date_default_timezone_set('Africa/Lagos');
 
         if (! session_start()) {
             throw new SessionException('Unable to start sesssion');

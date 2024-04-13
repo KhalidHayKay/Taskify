@@ -115,12 +115,6 @@ class User implements UserInterface
 		return $this->createdAt;
 	}
 
-	public function setCreatedAt(DateTime $createdAt): self
-	{
-		$this->createdAt = $createdAt;
-		return $this;
-	}
-
 	public function getContactPerson(): ?ContactPerson
 	{
 		return $this->contactPerson;

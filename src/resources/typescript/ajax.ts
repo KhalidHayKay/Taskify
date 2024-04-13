@@ -48,7 +48,6 @@ const ajax = (
 const get  = (url: string) => ajax(url);
 const post = (url: string, data: {}) => ajax(url, 'post', data);
 const put = (url: string, data: {}) => ajax(url, 'put', data);
-// const post = (url: string, data: {}, domElement) => ajax(url, 'post', data, domElement)
 const del  = (url: string, data: {}) => ajax(url, 'delete', data);
 
 // function handleValidationErrors(errors, domElement) {

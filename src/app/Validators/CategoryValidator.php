@@ -25,8 +25,8 @@ class CategoryValidator implements ValidatorInterface
         //     fn() => ! $this->entityManager->getRepository(User::class)->count(['username' => $data['username']]),
         //     'name'
         // )->message('A category with the given name already exists');
-        $v->rule('lengthMin', 'password', 5);
-        $v->rule('lengthMax', 'password', 25);
+        $v->rule('lengthMin', 'name', 5);
+        $v->rule('lengthMax', 'name', 25);
 
         if(! $v->validate()) {
             throw new InvalidCredentialsException($v->errors());

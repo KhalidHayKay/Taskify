@@ -5,11 +5,12 @@ namespace App\Services;
 
 use App\Entity\Category;
 use App\Entity\User;
+use App\Serilize;
 use Doctrine\ORM\EntityManager;
 
 class CategoryProviderService
 {
-    public function __construct(private readonly EntityManager $entityManager)
+    public function __construct(private readonly EntityManager $entityManager, private readonly Serilize $serilize)
     {
     }
     
@@ -23,7 +24,7 @@ class CategoryProviderService
         $this->entityManager->persist($category);
         $this->entityManager->flush();
 
-        return $this->getAll($user);
+        return $this->serilize->category($category);
     }
 
     public function getAll(User $user): array
@@ -32,19 +33,13 @@ class CategoryProviderService
         $categories = [];
 
         foreach ($data as $category) {
-            $categories[] = [
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'createdAt' => $category->getCreatedAt(),
-                'updatedAt' => $category->getUpdatedAt(),
-                'taskCount' => $category->getTasks()->count(),
-            ];
+            $categories[] = $this->serilize->category($category);
         }
 
         return $categories;
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $category = $this->entityManager->find(Category::class, $id);
 

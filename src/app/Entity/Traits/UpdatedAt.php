@@ -6,12 +6,13 @@ namespace App\Entity\Traits;
 
 use DateTime;
 use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreUpdate;
 
 trait UpdatedAt
 {
-    #[PrePersist]
+    #[PrePersist, PreUpdate]
 	public function makeUpdatedAt()
 	{
-        $this->updatedAt = new DateTime(date('d-m-Y h:i A'));
+        $this->updatedAt = new DateTime();
 	}
 }

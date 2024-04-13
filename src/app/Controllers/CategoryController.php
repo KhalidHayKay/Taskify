@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Serilize;
 use Slim\Views\Twig;
 use App\Services\CategoryProviderService;
 use Doctrine\ORM\EntityManager;
@@ -34,24 +35,16 @@ class CategoryController
 
         $response->getBody()->write(json_encode($categories));
 
-        return $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
 
-        $cats = $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
+        $category = $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
 
-        // $response->getBody()->write(json_encode([
-        //     $category->getName(),
-        //     $category->getCreatedAt(),
-        //     $category->getUpdatedAt(),
-        //     $category->getId(),
-        //     $category->getTasks()->count(),
-        // ]));
-
-        $response->getBody()->write(json_encode($cats));
+        $response->getBody()->write(json_encode($category));
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
@@ -67,7 +60,7 @@ class CategoryController
 
     public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $data = $request->getParsedBody();
+        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
 
         $this->categoryProvider->edit((int) $data['id'], $data['name']);
 

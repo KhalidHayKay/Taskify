@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table('categories')]
 #[HasLifecycleCallbacks]
 class Category
@@ -70,21 +70,9 @@ class Category
 		return $this->createdAt;
 	}
 
-	public function setCreatedAt(DateTime $createdAt): self
-	{
-		$this->createdAt = $createdAt;
-		return $this;
-	}
-
 	public function getUpdatedAt(): DateTime
 	{
 		return $this->updatedAt;
-	}
-
-	public function setUpdatedAt(DateTime $updatedAt): self
-	{
-		$this->updatedAt = $updatedAt;
-		return $this;
 	}
 
 	public function getUser(): User
