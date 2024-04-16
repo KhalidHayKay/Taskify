@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Middlewares\CsrfFieldsMiddleware;
-use App\Middlewares\InvalidCredentialsExceptionMiddleware;
-use App\Middlewares\OldFormDataMiddleware;
-use App\Middlewares\SessionStartSessionMiddleware;
-use App\Middlewares\TwigGlobalVariablesMiddleware;
-use App\Middlewares\ValidationErrorsMIddleware;
-use Psr\Container\ContainerInterface;
 use Slim\App;
-use Slim\Middleware\BodyParsingMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Psr\Container\ContainerInterface;
+use App\Middlewares\CsrfFieldsMiddleware;
+use App\Middlewares\OldFormDataMiddleware;
+use Slim\Middleware\BodyParsingMiddleware;
+use App\Middlewares\SessionStartMiddleware;
+use App\Middlewares\ValidationErrorsMIddleware;
+use App\Middlewares\TwigGlobalVariablesMiddleware;
+use App\Middlewares\InvalidCredentialsExceptionMiddleware;
 
 return function(App $app, ContainerInterface $container) {
     $app->add(CsrfFieldsMiddleware::class);
@@ -22,6 +22,6 @@ return function(App $app, ContainerInterface $container) {
     $app->add(TwigGlobalVariablesMiddleware::class);
     $app->add(OldFormDataMiddleware::class);
     $app->add(ValidationErrorsMIddleware::class);
-    $app->add(SessionStartSessionMiddleware::class);
+    $app->add(SessionStartMiddleware::class);
     $app->add(BodyParsingMiddleware::class);
 };

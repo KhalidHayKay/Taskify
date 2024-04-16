@@ -12,8 +12,6 @@ trait CreatedAt
     #[PrePersist]
 	public function makeCreatedAt()
 	{
-        if(! isset($this->createdAt)) {
-            $this->createdAt = new DateTime();
-        }
+        $this->createdAt = new DateTime();
 	}
 }

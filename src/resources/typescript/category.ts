@@ -1,10 +1,13 @@
 import '../scss/category.scss';
-import { del, get, post, put } from './ajax';
+import { clearValidationErrors, del, get, post, put } from './ajax';
 import element from './categoryElement';
-import { closeModal, openModal } from './modal';
+import Modal from './modal';
+
+const modalElement = document.querySelector('#modal') as HTMLElement
+const modalInput = modalElement.querySelector('input[name=category]') as HTMLInputElement;
+const modal = new Modal(modalElement, modalInput);
 
 let isEditMode = false;
-const nameInput = document.querySelector('input[name=category]') as HTMLInputElement;
 
 const render = () => {
     get('/categories/all').then(res => res.json()).then((res: []) => {
@@ -19,43 +22,53 @@ const render = () => {
                 const viewBtn = dispatcher.closest('button[data-name="view"]') as HTMLElement;
                 
                 if (delBtn) {
-                    del('/categories/delete', {id: delBtn.dataset.id})
-                        .then(() => render())
+                    del(`/categories/${delBtn.dataset.id}`).then(() => render())
                 } else if(editBtn) {
                     isEditMode = true;
-                    openModal();
-                    const nameElement = editBtn.parentElement?.parentElement?.parentElement?.firstElementChild?.firstElementChild?.firstElementChild?.firstElementChild;
-                    // other option to get edit target name is to make fetch request with btn's data-id, which might just increase latency
-                    nameInput.value = nameElement?.textContent ?? '';
                     const id = editBtn.dataset.id ?? '';
-                    sessionStorage.setItem('editId', id);
+                    get(`/categories/${id}`).then(res => res.json()).then(res => {
+                        modalInput.value = res.name
+                        sessionStorage.setItem('editId', res.id);
+                        modal.open();
+                    });
                 }
             })
         })
     })
 }
 
-document.querySelector('#modal-btn')?.addEventListener('click', openModal);
+document.querySelector('#modal-btn')?.addEventListener('click', () => modal.open());
 
 document.querySelector('#modal')?.addEventListener('click', (e) => {
     e.preventDefault();
     const dispacher = e.target as Node;
     if (dispacher.textContent === 'Save') {
         if (! isEditMode) {
-            post('/categories/add', {name: nameInput.value})
-                .then(res => res.json()).then(() => render());
+            post('/categories', {name: modalInput.value}, modal.modalElement).then(res => {
+                if (res.ok) {
+                    render();
+                    resetModal();
+                }
+            });
         } else {
-            put('/categories/update', {
-                id: sessionStorage.getItem('editId'),
-                name: nameInput.value,
-            }).then(() => render());
+            const id = sessionStorage.getItem('editId');
+            put(`/categories/${id}`, {name: modalInput.value}, modal.modalElement).then(res => {
+                if (res.ok) {
+                    render();
+                    resetModal();
+                }
+            });
         }
 
-        isEditMode = false;
-        closeModal();
     } else if (dispacher.textContent === 'Cancel') {
+        resetModal();
+    }
+
+    function resetModal() {
         isEditMode = false;
-        closeModal();
+        clearValidationErrors(modal.modalElement);
+        modal.close();
+        sessionStorage.removeItem('editId');
     }
 })
 

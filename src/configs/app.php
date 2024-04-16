@@ -24,7 +24,7 @@ return [
     ],
     'session' => [
         'name' => 'taskify_session',
-        'secure' => false,
+        'secure' => true,
         'httpOnly' => true,
         'sameSite' => 'lax'
     ],

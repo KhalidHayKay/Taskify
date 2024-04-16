@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\ResponseFormatter;
 use App\Serilize;
 use Slim\Views\Twig;
 use App\Services\CategoryProviderService;
@@ -20,6 +21,7 @@ class CategoryController
         private readonly EntityManager $entityManager, 
         private readonly ValidatorFactory $validatorFactory,
         private readonly CategoryProviderService $categoryProvider,
+        private readonly ResponseFormatter $responseFormatter
     )
     {
     }
@@ -33,34 +35,39 @@ class CategoryController
     {
         $categories = $this->categoryProvider->getAll($request->getAttribute('user'));
 
-        $response->getBody()->write(json_encode($categories));
+        return $this->responseFormatter->asJson($response, $categories)->withStatus(200);
+    }
 
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    public function retrieve(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $category = $this->categoryProvider->get((int) $args['id']);
+
+        return $this->responseFormatter->asJson($response, $category)->withStatus(200);
     }
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
+        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate(
+            $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId()]
+        );
 
         $category = $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
 
-        $response->getBody()->write(json_encode($category));
+        return $this->responseFormatter->asJson($response, $category)->withStatus(201);
+    }
+
+    public function remove(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $this->categoryProvider->delete((int) $args['id']);
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
-    public function remove(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $data = $request->getParsedBody();
-
-        $this->categoryProvider->delete((int) $data['id']);
-
-        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-    }
-
-    public function update(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate($request->getParsedBody());
+        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate(
+            $args + $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId(), 'isEdit' => true]
+        );
 
         $this->categoryProvider->edit((int) $data['id'], $data['name']);
 

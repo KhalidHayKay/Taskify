@@ -11,10 +11,17 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use App\Exceptions\InvalidCredentialsException;
 use App\Interfaces\SessionInterface;
+use App\ResponseFormatter;
+use App\Services\RequestService;
 
 class InvalidCredentialsExceptionMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly ResponseFactoryInterface $responseFactory, private readonly SessionInterface $session)
+    public function __construct(
+        private readonly ResponseFactoryInterface $responseFactory, 
+        private readonly SessionInterface $session,
+        private readonly RequestService $requestService,
+        private readonly ResponseFormatter $responseFormatter
+    )
     {
     }
 
@@ -25,12 +32,11 @@ class InvalidCredentialsExceptionMiddleware implements MiddlewareInterface
         } catch (InvalidCredentialsException $e) {
             $response = $this->responseFactory->createResponse();
 
-            if ($request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
-                var_dump($e->errors);
-                return $response->withStatus(422);
+            if ($this->requestService->isXHR($request)) {
+                return $this->responseFormatter->asJson($response->withStatus(422), $e->errors);
             }
 
-            $referer = $request->getServerParams()['HTTP_REFERER'];
+            $referer = $this->requestService->getReferer($request);
             $sensitiveData = ['password', 'confirm_password'];
 
             $oldCredentials = array_diff_key($request->getParsedBody(), array_flip($sensitiveData));

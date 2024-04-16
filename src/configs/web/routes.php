@@ -7,20 +7,28 @@ use App\Controllers\TaskController;
 use App\Middlewares\AuthMiddleware;
 use App\Controllers\CategoryController;
 use App\Middlewares\GuestMiddleware;
+use Slim\Routing\RouteCollectorProxy;
 
 return function(App $app) {
     $app->get('/', [HomeController::class, 'index'])->add(AuthMiddleware::class);
-    $app->get('/categories', [CategoryController::class, 'index'])->add(AuthMiddleware::class);
-    $app->get('/categories/all', [CategoryController::class, 'retrieveAll'])->add(AuthMiddleware::class);
-    $app->post('/categories/add', [CategoryController::class, 'new'])->add(AuthMiddleware::class);
-    $app->delete('/categories/delete', [CategoryController::class, 'remove'])->add(AuthMiddleware::class);
-    $app->put('/categories/update', [CategoryController::class, 'update'])->add(AuthMiddleware::class);
-    $app->get('/tasks', [TaskController::class, 'index'])->add(AuthMiddleware::class);
-
-    $app->get('/login', [AuthController::class, 'loginView'])->add(GuestMiddleware::class);
-    $app->get('/signup', [AuthController::class, 'signupView'])->add(GuestMiddleware::class);
-    $app->post('/login', [AuthController::class, 'login'])->add(GuestMiddleware::class);
-    $app->post('/signup', [AuthController::class, 'signup'])->add(GuestMiddleware::class);
-
+    
+    $app->group('', function (RouteCollectorProxy $guest) {
+        $guest->get('/login', [AuthController::class, 'loginView']);
+        $guest->get('/signup', [AuthController::class, 'signupView']);
+        $guest->post('/login', [AuthController::class, 'login']);
+        $guest->post('/signup', [AuthController::class, 'signup']);
+    })->add(GuestMiddleware::class);
+    
     $app->post('/logout', [AuthController::class, 'logout'])->add(AuthMiddleware::class);
+
+    $app->group('/categories', function (RouteCollectorProxy $categories) {
+        $categories->get('', [CategoryController::class, 'index']);
+        $categories->get('/all', [CategoryController::class, 'retrieveAll']);
+        $categories->get('/{id:[0-9]+}', [CategoryController::class, 'retrieve']);
+        $categories->post('', [CategoryController::class, 'new']);
+        $categories->delete('/{id:[0-9]+}', [CategoryController::class, 'remove']);
+        $categories->put('/{id:[0-9]+}', [CategoryController::class, 'update']);
+    })->add(AuthMiddleware::class);
+
+    $app->get('/tasks', [TaskController::class, 'index'])->add(AuthMiddleware::class);
 };

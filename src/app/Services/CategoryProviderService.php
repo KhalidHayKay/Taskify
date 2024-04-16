@@ -39,6 +39,13 @@ class CategoryProviderService
         return $categories;
     }
 
+    public function get(int $id): array
+    {
+        $category = $this->entityManager->find(Category::class, $id);
+
+        return $this->serilize->category($category);
+    }
+
     public function delete(int $id): void
     {
         $category = $this->entityManager->find(Category::class, $id);

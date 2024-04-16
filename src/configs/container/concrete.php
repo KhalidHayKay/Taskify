@@ -3,28 +3,29 @@
 declare(strict_types=1);
 
 use App\Auth;
+use App\Csrf;
 use Slim\App;
 use App\Config;
-use App\DTOs\SessionConfig;
-use App\Entity\User;
-use App\Enums\AppEnvironmentEnum;
-use App\Enums\SessionSamesiteOptionEnum;
-use App\Interfaces\AuthInterface;
-use App\Interfaces\SessionInterface;
-use App\Interfaces\UserInterface;
-use App\Interfaces\UserProviderInterface;
-use App\Services\UserProviderService;
 use App\Session;
+use App\Entity\User;
+use Slim\Csrf\Guard;
 use Slim\Views\Twig;
 use Doctrine\ORM\ORMSetup;
+use App\DTOs\SessionConfig;
+use Slim\Factory\AppFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DriverManager;
+use App\Enums\AppEnvironmentEnum;
+use App\Interfaces\AuthInterface;
+use App\Interfaces\UserInterface;
+use App\Interfaces\SessionInterface;
 use Symfony\Component\Asset\Package;
+use App\Services\UserProviderService;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Csrf\Guard;
-use Slim\Factory\AppFactory;
 use Symfony\Component\Asset\Packages;
+use App\Enums\SessionSamesiteOptionEnum;
+use App\Interfaces\UserProviderInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
@@ -84,5 +85,9 @@ return [
     AuthInterface::class => fn(ContainerInterface $container) => $container->get(Auth::class),
     UserInterface::class => fn(ContainerInterface $container) => $container->get(User::class),
     UserProviderInterface::class => fn(ContainerInterface $container) => $container->get(UserProviderService::class),
-    'csrf' => fn(ResponseFactoryInterface $responseFactory) => new Guard($responseFactory, persistentTokenMode: true),
+    'csrf' => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf) => new Guard(
+        $responseFactory, 
+        persistentTokenMode: true, 
+        failureHandler: $csrf->failureHandler()
+    ),
 ];

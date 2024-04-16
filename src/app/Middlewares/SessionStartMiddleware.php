@@ -6,14 +6,16 @@ namespace App\Middlewares;
 
 use App\Exceptions\SessionException;
 use App\Interfaces\SessionInterface;
+use App\Services\RequestService;
+use Doctrine\ORM\Query\Expr\Func;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class SessionStartSessionMiddleware implements MiddlewareInterface
+class SessionStartMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly SessionInterface $session)
+    public function __construct(private readonly SessionInterface $session, private readonly RequestService $requestService)
     {
     }
 
@@ -22,6 +24,10 @@ class SessionStartSessionMiddleware implements MiddlewareInterface
         $this->session->start();
 
         $response = $handler->handle($request);
+
+        if ($request->getMethod() === 'GET' && ! $this->requestService->isXHR($request)) {
+            $this->session->put('previousUrl', (string) $request->getUri());
+        }
 
         $this->session->save();
 

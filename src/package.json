@@ -19,7 +19,6 @@
     "webpack-notifier": "^1.15.0"
   },
   "dependencies": {
-    "alpinejs": "^3.13.7",
     "core-js": "^3.36.0",
     "datatables.net-dt": "^2.0.2",
     "date-fns": "^3.6.0",

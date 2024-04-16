@@ -22,9 +22,10 @@ Encore
      */
     .addEntry('app', './resources/typescript/app.ts')
     .addEntry('layout', './resources/typescript/layout.ts')
+    .addEntry('category', './resources/typescript/category.ts')
+    .addEntry('task', './resources/typescript/task.ts')
     .addEntry('auth_layout', './resources/typescript/auth/layout.ts')
     .addEntry('alpine', './resources/typescript/packages/alpine.ts')
-    .addEntry('category', './resources/typescript/category.ts')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -45,7 +46,7 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
 
     // enables hashed filenames (e.g. app.abc123.css)
-    // .enableVersioning(Encore.isProduction())
+    .enableVersioning(Encore.isDev())
     // .enableVersioning()
 
     .configureBabel((config) => {

@@ -1,21 +1,34 @@
-const modalBg = document.querySelector('#modal-bg');
-const modal = document.querySelector('#modal');
-const modalInput = modal?.querySelector('input[name=category]') as HTMLInputElement;
+class Modal
+{
+    private modalBackground?: HTMLElement = undefined;
 
-const openModal = () => {
-    modalBg?.classList.remove('hidden');
-    modal?.classList.remove('hidden');
-    modalInput.focus();
+    public constructor(
+        public readonly modalElement: HTMLElement, 
+        public readonly modalInputElement: HTMLInputElement | null = null
+    ) 
+    {
+        if (this.modalElement.parentElement) {
+            this.modalBackground = this.modalElement.parentElement;
+        }
+    }
+
+    public open(): void
+    {
+        this.modalBackground?.classList.remove('hidden');
+        this.modalElement?.classList.remove('hidden');
+        if (this.modalInputElement) {
+            this.modalInputElement.focus();
+        }
+    }
+
+    public close(): void
+    {
+        this.modalBackground?.classList.add('hidden');
+        this.modalElement?.classList.add('hidden');
+        if (this.modalInputElement) {
+            this.modalInputElement.value = '';
+        }
+    }
 }
 
-const closeModal = () => {
-    modalBg?.classList.add('hidden');
-    modal?.classList.add('hidden');
-    modalInput.value = '';
-}
-
-
-export {
-    openModal,
-    closeModal
-}
+export default Modal;
