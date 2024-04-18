@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
 use App\Interfaces\ValidatorInterface;
 use App\Exceptions\InvalidCredentialsException;
 
-class CategoryValidator implements ValidatorInterface
+class TaskValidator implements ValidatorInterface
 {
     public function __construct(private readonly EntityManager $entityManager)
     {
@@ -24,7 +24,7 @@ class CategoryValidator implements ValidatorInterface
         // ) > 1);
         $v = new Validator($data);
 
-        $v->rule('required', ['name']);
+        $v->rule('required', ['name', 'due_date']);
 
         $v->rule(
             function () use ($data) {
@@ -50,6 +50,7 @@ class CategoryValidator implements ValidatorInterface
             'name'
         )->message('A category with the given name already exists');
 
+        $v->rule('lengthMin', 'name', 5);
         $v->rule('lengthMax', 'name', 25);
 
         if (! $v->validate()) {

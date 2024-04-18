@@ -6,7 +6,7 @@ namespace App\Enums;
 
 enum TaskStatusEnum: string
 {
-    case CommingUp = 'comming up';
+    case Scheduled = 'scheduled';
     case Completed = 'completed';
-    case OverDue = 'over due';
+    case OverDue = 'overdue';
 }

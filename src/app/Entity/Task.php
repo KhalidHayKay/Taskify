@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedAt;
+use App\Entity\Traits\UpdatedAt;
 use App\Enums\TaskStatusEnum;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -25,13 +27,16 @@ class Task
     private string $name;
 
     #[Column]
-    private string $description;
+    private ?string $description;
 
     #[Column(name: 'created_at')]
     private DateTime $createdAt;
 
     #[Column(name: 'updated_at')]
     private DateTime $updatedAt;
+
+    #[Column(name: 'due_date')]
+    private DateTime $dueDate;
 
     #[Column]
     private TaskStatusEnum $status;
@@ -41,6 +46,9 @@ class Task
 
     #[ManyToOne(inversedBy: 'tasks')]
     private Category $category;
+
+	use CreatedAt;
+	use UpdatedAt;
 
 	public function getId(): int
 	{
@@ -58,12 +66,12 @@ class Task
 		return $this;
 	}
 
-	public function getDescription(): string
+	public function getDescription(): ?string
 	{
 		return $this->description;
 	}
 
-	public function setDescription(string $description): self
+	public function setDescription(?string $description): self
 	{
 		$this->description = $description;
 		return $this;
@@ -74,20 +82,19 @@ class Task
 		return $this->createdAt;
 	}
 
-	public function setCreatedAt(DateTime $createdAt): self
-	{
-		$this->createdAt = $createdAt;
-		return $this;
-	}
-
 	public function getUpdatedAt(): DateTime
 	{
 		return $this->updatedAt;
 	}
 
-	public function setUpdatedAt(DateTime $updatedAt): self
+	public function getDueDate(): DateTime
 	{
-		$this->updatedAt = $updatedAt;
+		return $this->dueDate;
+	}
+
+	public function setDueDate(DateTime $dueDate): self
+	{
+		$this->dueDate = $dueDate;
 		return $this;
 	}
 

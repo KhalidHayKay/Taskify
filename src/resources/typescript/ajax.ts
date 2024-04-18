@@ -57,7 +57,6 @@ const handleValidationErrors = (errors?: [], domElement?: HTMLElement) => {
             const errorDiv = domElement.querySelector('#error-div') as HTMLElement;
 
             element?.classList.add('is-invalid');
-            // errorDiv.classList.add('invalid-feedback');
             errorDiv.textContent = errors[name][0];
         }
     }

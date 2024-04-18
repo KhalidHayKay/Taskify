@@ -1,0 +1,30 @@
+{% extends "layout.twig" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('task') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('task', null, '', {defer: true}) }}
+{% endblock %}
+
+{% block content %}
+    <div id="category-container" class="h-full bg-white">
+        <div>
+            <button id="open-modal-btn"
+                class="left-[92%] top-3 relative flex flex-row-reverse items-center gap-1 px-2.5 py-1 text-sm bg-blue-600 text-gray-100 rounded-md transition-colors duration-150 ease-linear focus:outline-none font-bold hover:bg-blue-700 focus:bg-blue-700">
+                Task 
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </button>
+    
+            <!-- Modal Background -->
+            {% include "task/task_modal.twig" %}
+        </div>
+    </div>
+{% endblock %}

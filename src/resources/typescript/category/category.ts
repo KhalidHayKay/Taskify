@@ -1,11 +1,10 @@
-import '../scss/category.scss';
-import { clearValidationErrors, del, get, post, put } from './ajax';
-import element from './categoryElement';
-import Modal from './modal';
+import '../../scss/category.scss';
+import { clearValidationErrors, del, get, post, put } from '../ajax';
+import element from './elements';
+import Modal from '../modal';
 
 const modalElement = document.querySelector('#modal') as HTMLElement
-const modalInput = modalElement.querySelector('input[name=category]') as HTMLInputElement;
-const modal = new Modal(modalElement, modalInput);
+const modal = new Modal(modalElement);
 
 let isEditMode = false;
 
@@ -27,7 +26,7 @@ const render = () => {
                     isEditMode = true;
                     const id = editBtn.dataset.id ?? '';
                     get(`/categories/${id}`).then(res => res.json()).then(res => {
-                        modalInput.value = res.name
+                        (modal.InputElement as HTMLInputElement).value = res.name
                         sessionStorage.setItem('editId', res.id);
                         modal.open();
                     });
@@ -37,14 +36,14 @@ const render = () => {
     })
 }
 
-document.querySelector('#modal-btn')?.addEventListener('click', () => modal.open());
+document.querySelector('#open-modal-btn')?.addEventListener('click', () => modal.open());
 
 document.querySelector('#modal')?.addEventListener('click', (e) => {
     e.preventDefault();
-    const dispacher = e.target as Node;
-    if (dispacher.textContent === 'Save') {
+    const dispacher = e.target as Node | HTMLElement;
+    if (dispacher.textContent?.trim() === 'Save') {
         if (! isEditMode) {
-            post('/categories', {name: modalInput.value}, modal.modalElement).then(res => {
+            post('/categories', {name: (modal.InputElement as HTMLInputElement).value}, modal.element).then(res => {
                 if (res.ok) {
                     render();
                     resetModal();
@@ -52,7 +51,7 @@ document.querySelector('#modal')?.addEventListener('click', (e) => {
             });
         } else {
             const id = sessionStorage.getItem('editId');
-            put(`/categories/${id}`, {name: modalInput.value}, modal.modalElement).then(res => {
+            put(`/categories/${id}`, {name: (modal.InputElement as HTMLInputElement).value}, modal.element).then(res => {
                 if (res.ok) {
                     render();
                     resetModal();
@@ -60,13 +59,13 @@ document.querySelector('#modal')?.addEventListener('click', (e) => {
             });
         }
 
-    } else if (dispacher.textContent === 'Cancel') {
+    } else if (dispacher.textContent?.trim() === 'Cancel') {
         resetModal();
     }
 
     function resetModal() {
         isEditMode = false;
-        clearValidationErrors(modal.modalElement);
+        clearValidationErrors(modal.element);
         modal.close();
         sessionStorage.removeItem('editId');
     }
