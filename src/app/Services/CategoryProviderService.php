@@ -18,8 +18,7 @@ class CategoryProviderService
     {
         $category = new Category;
 
-        $category->setName($name);
-        $category->setUser($user);
+        $category->setName($name)->setUser($user);
 
         $this->entityManager->persist($category);
         $this->entityManager->flush();
@@ -29,14 +28,9 @@ class CategoryProviderService
 
     public function getAll(User $user): array
     {
-        $data = $this->entityManager->find(User::class, $user->getId())->getCategories()->toArray();
-        $categories = [];
+        $categories = $this->entityManager->find(User::class, $user->getId())->getCategories()->toArray();
 
-        foreach ($data as $category) {
-            $categories[] = $this->serilize->category($category);
-        }
-
-        return $categories;
+        return array_map(fn($category) => $this->serilize->category($category), $categories);
     }
 
     public function get(int $id): array

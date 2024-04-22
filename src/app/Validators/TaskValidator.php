@@ -19,14 +19,11 @@ class TaskValidator implements ValidatorInterface
 
     public function validate(array $data): array
     {
-        // var_dump($this->entityManager->getRepository(Category::class)->count(
-        //     ['user' => $this->entityManager->find(User::class, $data['user_id']), 'name' => $data['name']]
-        // ) > 1);
         $v = new Validator($data);
 
-        $v->rule('required', ['name', 'due_date']);
+        $v->rule('required', ['name', 'due_date', 'category']);
 
-        $v->rule(
+        /* $v->rule(
             function () use ($data) {
                 $count = $this->entityManager->getRepository(Category::class)->count([
                     'user' => $this->entityManager->find(User::class, $data['user_id']), 
@@ -48,10 +45,11 @@ class TaskValidator implements ValidatorInterface
                 return ! $count;
             },
             'name'
-        )->message('A category with the given name already exists');
+        )->message('A category with the given name already exists'); */
 
-        $v->rule('lengthMin', 'name', 5);
-        $v->rule('lengthMax', 'name', 25);
+        $v->rule('lengthMax', 'name', 15);
+        $v->rule('lengthMin', 'description', 5);
+        $v->rule('lengthMax', 'description', 30);
 
         if (! $v->validate()) {
             throw new InvalidCredentialsException($v->errors());

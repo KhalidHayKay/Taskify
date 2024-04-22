@@ -30,5 +30,12 @@ return function(App $app) {
         $categories->put('/{id:[0-9]+}', [CategoryController::class, 'update']);
     })->add(AuthMiddleware::class);
 
-    $app->get('/tasks', [TaskController::class, 'index'])->add(AuthMiddleware::class);
+    $app->group('/tasks', function (RouteCollectorProxy $task) {
+        $task->get('', [TaskController::class, 'index']);
+        $task->post('', [TaskController::class, 'new']);
+        $task->get('/all', [TaskController::class, 'retrieveAll']);
+        $task->get('/load', [TaskController::class, 'retrieveForTable']);
+        $task->get('/{id:[0-9]+}', [TaskController::class, 'retrieve']);
+        $task->delete('/{id:[0-9]+}', [TaskController::class, 'remove']);
+    })->add(AuthMiddleware::class);
 };

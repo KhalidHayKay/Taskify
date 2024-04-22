@@ -8,16 +8,16 @@ use App\Entity\Traits\CreatedAt;
 use App\Entity\Traits\UpdatedAt;
 use App\Enums\TaskStatusEnum;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
-#[Table('tasks')]
+#[Entity, Table('tasks')]
+#[HasLifecycleCallbacks]
 class Task
 {
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]

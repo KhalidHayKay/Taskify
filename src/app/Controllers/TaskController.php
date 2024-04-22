@@ -40,9 +40,22 @@ class TaskController
 
     public function retrieveAll(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $task = $this->taskProvider->getAll($request->getAttribute('user'));
+        $tasks = $this->taskProvider->getAll($request->getAttribute('user'));
 
-        return $this->responseFormatter->asJson($response, $task)->withStatus(200);
+        return $this->responseFormatter->asJson($response, $tasks)->withStatus(200);
+    }
+
+    public function retrieveForTable(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $params = $request->getQueryParams();
+        $tasks = $this->taskProvider->getAll($request->getAttribute('user'));
+
+        return $this->responseFormatter->asJson($response, [
+            'data' => $tasks,
+            'draw' => (int) $params['draw'],
+            'recordsTotal' => count($tasks),
+            'recordsFiltered' => count($tasks),
+        ])->withStatus(200);
     }
 
     public function retrieve(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -55,27 +68,35 @@ class TaskController
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $data = $this->validatorFactory->resolve(TaskValidator::class)->validate(
-            $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId()]
+            $request->getParsedBody()
         );
+
+        var_dump($data);
 
         $task = $this->taskProvider->create(new TaskData(
             $data['name'],
             $data['description'],
-            $data['dueDate'],
+            $data['due_date'],
             TaskStatusEnum::Scheduled,
-            $data['id'],
+            (int) $data['category'],
             $request->getAttribute('user'),
         ));
 
         return $this->responseFormatter->asJson($response, $task)->withStatus(201);
     }
 
-    // public function remove(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    // {
-    //     $this->categoryProvider->delete((int) $args['id']);
+    public function date(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        return $this->twig->render($response, 'date.twig');
+    }
 
-    //     return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-    // }
+
+    public function remove(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $this->taskProvider->delete((int) $args['id']);
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
 
     // public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     // {

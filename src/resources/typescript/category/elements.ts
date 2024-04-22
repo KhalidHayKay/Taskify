@@ -4,8 +4,8 @@ const element = (obj: {
     id: number
     name: string, 
     taskCount: number, 
-    createdAt: {date: string}, 
-    updatedAt: {date: string}
+    createdAt: string, 
+    updatedAt: string
 }) => {
     return `
         <tr>
@@ -17,12 +17,12 @@ const element = (obj: {
                 </div>
             </td>
             <td class="px-10 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                <div class="inline-flex items-center p-2 rounded-full bg-blue-500">
+                <div class="inline-flex items-center p-2 rounded-full bg-blue-700">
                     <h2 class="text-sm text-center font-normal text-blue-50 px-2">${obj.taskCount}</h2>
                 </div>
             </td>
-            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.createdAt.date, 'dd/MM/yy hh:mm aa')}</td>
-            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.updatedAt.date, 'dd/MM/yy hh:mm aa')}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.createdAt, 'dd/MM/yy hh:mm aa')}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.updatedAt, 'dd/MM/yy hh:mm aa')}</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                 <div class="flex items-center gap-x-10">
                     <button class="text-gray-500 transition-colors duration-200 hover:text-red-500 focus:outline-none" data-name="delete" data-id=${obj.id}>

@@ -23,12 +23,14 @@ class TaskProviderService
     {
         $task = new Task;
 
-        $task->setName($taskData->name);
-        $task->setDescription($taskData->description);
-        $task->setDueDate(new DateTime($taskData->dueDate));
-        $task->setStatus($taskData->status);
-        $task->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
-        $task->setUser($taskData->user);
+        $task
+            ->setName($taskData->name)
+            ->setDescription($taskData->description)
+            ->setDueDate(new DateTime($taskData->dueDate))
+            ->setStatus($taskData->status)
+            ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
+            ->setUser($taskData->user)
+        ;
 
         $this->entityManager->persist($task);
         $this->entityManager->flush();
@@ -38,25 +40,23 @@ class TaskProviderService
 
     public function getAll(User $user): array
     {
-        $categories = $this->entityManager->find(User::class, $user->getId())->getTasks()->toArray();
+        $tasks = $this->entityManager->find(User::class, $user->getId())->getTasks()->toArray();
 
-        return array_map(function($category) {
-           return $this->serilize->category($category);
-        }, $categories);
+        return array_map(fn($task) => $this->serilize->task($task), $tasks);
     }
 
     public function get(int $id): array
     {
-        $category = $this->entityManager->find(Category::class, $id);
+        $task = $this->entityManager->find(Task::class, $id);
 
-        return $this->serilize->category($category);
+        return $this->serilize->task($task);
     }
 
     public function delete(int $id): void
     {
-        $category = $this->entityManager->find(Task::class, $id);
+        $task = $this->entityManager->find(Task::class, $id);
 
-        $this->entityManager->remove($category);
+        $this->entityManager->remove($task);
         $this->entityManager->flush();
     }
 
@@ -64,10 +64,12 @@ class TaskProviderService
     {
         $task = $this->entityManager->find(Task::class, $id);
 
-        $task->setName($taskData->name);
-        $task->setDescription($taskData->description);
-        $task->setDueDate($taskData->dueDate);
-        $task->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
+        $task
+            ->setName($taskData->name)
+            ->setDescription($taskData->description)
+            ->setDueDate($taskData->dueDate)
+            ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
+        ;
 
         $this->entityManager->flush();
     }

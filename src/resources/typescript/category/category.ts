@@ -10,6 +10,7 @@ let isEditMode = false;
 
 const render = () => {
     get('/categories/all').then(res => res.json()).then((res: []) => {
+        console.log(res);
         const container = document.querySelector('table>tbody') as HTMLElement;
         container.innerHTML = res.map(item => element(item)).join('');
     
@@ -26,7 +27,7 @@ const render = () => {
                     isEditMode = true;
                     const id = editBtn.dataset.id ?? '';
                     get(`/categories/${id}`).then(res => res.json()).then(res => {
-                        (modal.InputElement as HTMLInputElement).value = res.name
+                        (modal.getInputFields() as HTMLInputElement).value = res.name
                         sessionStorage.setItem('editId', res.id);
                         modal.open();
                     });
@@ -38,37 +39,36 @@ const render = () => {
 
 document.querySelector('#open-modal-btn')?.addEventListener('click', () => modal.open());
 
-document.querySelector('#modal')?.addEventListener('click', (e) => {
+modal.submitButton?.addEventListener('click', (e) => {
     e.preventDefault();
-    const dispacher = e.target as Node | HTMLElement;
-    if (dispacher.textContent?.trim() === 'Save') {
-        if (! isEditMode) {
-            post('/categories', {name: (modal.InputElement as HTMLInputElement).value}, modal.element).then(res => {
-                if (res.ok) {
-                    render();
-                    resetModal();
-                }
-            });
-        } else {
-            const id = sessionStorage.getItem('editId');
-            put(`/categories/${id}`, {name: (modal.InputElement as HTMLInputElement).value}, modal.element).then(res => {
-                if (res.ok) {
-                    render();
-                    resetModal();
-                }
-            });
-        }
-
-    } else if (dispacher.textContent?.trim() === 'Cancel') {
-        resetModal();
-    }
-
-    function resetModal() {
-        isEditMode = false;
-        clearValidationErrors(modal.element);
-        modal.close();
-        sessionStorage.removeItem('editId');
+    if (! isEditMode) {
+        post('/categories', {name: (modal.getInputFields() as HTMLInputElement).value}, modal.element).then(res => {
+            if (res.ok) {
+                render();
+                modal.close();
+                resetModal();
+            }
+        });
+    } else {
+        const id = sessionStorage.getItem('editId');
+        put(`/categories/${id}`, {name: (modal.getInputFields() as HTMLInputElement).value}, modal.element).then(res => {
+            if (res.ok) {
+                render();
+                modal.close();
+                resetModal();
+            }
+        });
     }
 })
+    
+modal.cancelButton?.addEventListener('click', () => {
+    resetModal();
+});
+
+const resetModal = () => {
+    isEditMode = false;
+    clearValidationErrors(modal.element);
+    sessionStorage.removeItem('editId');
+};
 
 render();

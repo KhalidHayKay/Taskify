@@ -1,7 +1,6 @@
 class Modal
 {
     private readonly modalBackground?: HTMLElement = undefined;
-    public readonly InputElement: HTMLInputElement | Array<HTMLInputElement | HTMLSelectElement>;
 
     public constructor(
         public readonly element: HTMLElement, 
@@ -11,13 +10,10 @@ class Modal
             this.modalBackground = this.element.parentElement;
         }
 
-        const inputs = Array.from(element.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select'));
-
-        if (inputs.length === 1) {
-            this.InputElement = inputs[0] as HTMLInputElement;
-        } else {
-            this.InputElement = inputs;
-        }
+        element.querySelector('#cancel-btn')?.addEventListener('click', () => {
+            this.close();
+            this.clearInputs();
+        })
     }
 
     public open(): void
@@ -36,11 +32,13 @@ class Modal
 
     private clearInputs(): void
     {
-        if (this.InputElement) { 
-            if (! Array.isArray(this.InputElement)) {
-                this.InputElement.value = '';
+        const inputElement = this.getInputFields();
+
+        if (inputElement) { 
+            if (! Array.isArray(inputElement)) {
+                inputElement.value = '';
             } else {
-                this.InputElement.forEach(input => {
+                inputElement.forEach(input => {
                     input.value = '';
                 });
             }
@@ -49,14 +47,38 @@ class Modal
 
     private focusInputs(): void
     {
-        if (this.InputElement) { 
-            if (! Array.isArray(this.InputElement)) {
-                this.InputElement.focus()
+        const inputElement = this.getInputFields();
+
+        if (inputElement) { 
+            if (! Array.isArray(inputElement)) {
+                inputElement.focus()
             } else {
-                this.InputElement[0].focus();
+                inputElement[0].focus();
             }
         }
     }
+
+    public getInputFields(): HTMLInputElement | Array<HTMLInputElement | HTMLSelectElement>
+    {
+        const inputs = Array.from(this.element.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select'));
+
+        if (inputs.length === 1) {
+            return inputs[0] as HTMLInputElement;
+        } else {
+            return inputs;
+        }
+    }
+
+    public get submitButton(): HTMLButtonElement | null
+    {
+        return this.element.querySelector('#submit-btn');
+    }
+
+    public get cancelButton(): HTMLButtonElement | null
+    {
+        return this.element.querySelector('#cancel-btn');
+    }
+    
 }
 
 export default Modal;
