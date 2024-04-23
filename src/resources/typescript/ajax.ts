@@ -34,7 +34,6 @@ const ajax = (
             if (response.status === 422) {
                 response.json().then(errors => {
                     handleValidationErrors(errors, domElement);
-                    console.log(errors.name);
                 })
             } else if (response.status === 404) {
                 alert(response.statusText)
@@ -53,10 +52,10 @@ const del  = (url: string, data?: {}) => ajax(url, 'delete', data);
 const handleValidationErrors = (errors?: [], domElement?: HTMLElement) => {
     if (errors && domElement) {
         for (const name in errors) {
-            const element = domElement.querySelector(`input[name="${ name }"]`);
-            const errorDiv = domElement.querySelector('#error-div') as HTMLElement;
+            const element = domElement.querySelector(`input[name=${ name }], select[name=${ name }]`);
+            const errorDiv = element?.nextElementSibling as HTMLElement;
 
-            element?.classList.add('is-invalid');
+            element?.classList.add('border-red-500');
             errorDiv.textContent = errors[name][0];
         }
     }
@@ -65,6 +64,7 @@ const handleValidationErrors = (errors?: [], domElement?: HTMLElement) => {
 const clearValidationErrors = (domElement: HTMLElement) => {
     domElement.querySelectorAll('#error-div').forEach(element => {
         element.textContent = '';
+        element.previousElementSibling?.classList.remove('border-red-500');
     });
 }
 

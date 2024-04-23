@@ -1,5 +1,5 @@
 import '../../scss/category.scss';
-import { clearValidationErrors, del, get, post, put } from '../ajax';
+import { del, get, post, put } from '../ajax';
 import element from './elements';
 import Modal from '../modal';
 
@@ -10,7 +10,6 @@ let isEditMode = false;
 
 const render = () => {
     get('/categories/all').then(res => res.json()).then((res: []) => {
-        console.log(res);
         const container = document.querySelector('table>tbody') as HTMLElement;
         container.innerHTML = res.map(item => element(item)).join('');
     
@@ -26,9 +25,9 @@ const render = () => {
                 } else if(editBtn) {
                     isEditMode = true;
                     const id = editBtn.dataset.id ?? '';
-                    get(`/categories/${id}`).then(res => res.json()).then(res => {
-                        (modal.getInputFields() as HTMLInputElement).value = res.name
-                        sessionStorage.setItem('editId', res.id);
+                    get(`/categories/${id}`).then(res => res.json()).then(category => {
+                        (modal.getInputFields() as HTMLInputElement).value = category.name
+                        sessionStorage.setItem('editId', category.id);
                         modal.open();
                     });
                 }
@@ -67,7 +66,6 @@ modal.cancelButton?.addEventListener('click', () => {
 
 const resetModal = () => {
     isEditMode = false;
-    clearValidationErrors(modal.element);
     sessionStorage.removeItem('editId');
 };
 

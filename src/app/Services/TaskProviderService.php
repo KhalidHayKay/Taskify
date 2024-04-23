@@ -67,7 +67,7 @@ class TaskProviderService
         $task
             ->setName($taskData->name)
             ->setDescription($taskData->description)
-            ->setDueDate($taskData->dueDate)
+            ->setDueDate(new DateTime($taskData->dueDate))
             ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
         ;
 

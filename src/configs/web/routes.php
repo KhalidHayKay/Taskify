@@ -37,5 +37,6 @@ return function(App $app) {
         $task->get('/load', [TaskController::class, 'retrieveForTable']);
         $task->get('/{id:[0-9]+}', [TaskController::class, 'retrieve']);
         $task->delete('/{id:[0-9]+}', [TaskController::class, 'remove']);
+        $task->put('/{id:[0-9]+}', [TaskController::class, 'update']);
     })->add(AuthMiddleware::class);
 };

@@ -1,3 +1,5 @@
+import { clearValidationErrors } from "./ajax";
+
 class Modal
 {
     private readonly modalBackground?: HTMLElement = undefined;
@@ -13,6 +15,7 @@ class Modal
         element.querySelector('#cancel-btn')?.addEventListener('click', () => {
             this.close();
             this.clearInputs();
+            clearValidationErrors(element);
         })
     }
 

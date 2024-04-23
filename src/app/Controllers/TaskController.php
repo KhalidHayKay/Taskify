@@ -98,14 +98,21 @@ class TaskController
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }
 
-    // public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    // {
-    //     $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate(
-    //         $args + $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId(), 'isEdit' => true]
-    //     );
+    public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $data = $this->validatorFactory->resolve(TaskValidator::class)->validate(
+            $args + $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId(), 'isEdit' => true]
+        );
 
-    //     $this->categoryProvider->edit((int) $data['id'], $data['name']);
+        $this->taskProvider->edit((int) $data['id'], new TaskData(
+            $data['name'],
+            $data['description'],
+            $data['due_date'],
+            TaskStatusEnum::Scheduled,
+            (int) $data['category'],
+            $request->getAttribute('user'),
+        ));
 
-    //     return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
-    // }
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
 }
