@@ -23,25 +23,25 @@
                 </svg>
             </button>
     
-            <!-- Modal Background -->
+            <!-- Modal -->
             {% include "task/task_modal.twig" %}
         </div>
 
         <section class="container px-4 mx-auto mt-7 h-full overflow-y-scroll">
-            <table id="tasks-table" class="w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table id="tasks-table" class="{# DataTable styles #}stripe">
+                <thead>
                     <tr>
-                        <th class="font-normal p-3 text-left">Name</th>
-                        <th class="font-normal p-3 text-left">Category</th>
-                        <th class="font-normal p-3 text-left">Status</th>
-                        <th class="font-normal p-3 text-left">Created At</th>
-                        <th class="font-normal p-3 text-left">Due Date</th>
-                        <th class="font-normal p-3 text-left">
+                        <th class="">Name</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Due Date</th>
+                        <th>
                             <span class="sr-only">Edit</span>
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="bg-white">
                     {# <tr>
                         <td class="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                             <div class="flex items-center gap-x-2">

@@ -2,7 +2,7 @@ require("flatpickr/dist/themes/dark.css");
 import '../../scss/task.scss';
 import Modal from '../modal';
 import { del, get, post, put } from '../ajax';
-import { buttons, category, dateTime, name, status } from './elements';
+import elements from './elements';
 import DataTable from 'datatables.net';
 import flatpickr from "flatpickr";
 
@@ -11,16 +11,16 @@ const table = new DataTable('#tasks-table', {
     ajax: '/tasks/load',
     orderMulti: false,
     columns: [
-        { data: row => name(row.name, row.description) },
-        { data: row => category(row.category) },
-        { data: row => status(row.status) },
-        { data: row => dateTime(row.createdAt) },
-        { data: row => dateTime(row.dueDate) },
+        { data: row => elements.name(row.name) },
+        { data: row => elements.category(row.category) },
+        { data: row => elements.status(row.status) },
+        { data: row => elements.dateTime(row.createdAt) },
+        { data: row => elements.dateTime(row.dueDate) },
         {
             orderable: false,
-            data: row => buttons(row.id),
+            data: row => elements.buttons(row.id),
         }
-    ]
+    ],
 });
 
 const modalElement = document.querySelector('#modal') as HTMLElement;
@@ -79,7 +79,7 @@ document.querySelector('#tasks-table')?.addEventListener('click', (e) => {
         get(`/tasks/${editBtn.dataset.id}`).then(res => res.json()).then(task => {
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[0].value = task.name;
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[1].value = task.description;
-            // ((modalInput as Array<HTMLSelectElement | HTMLInputElement>)[2] as HTMLSelectElement).selectedIndex = task.category;
+            // ((modalInput as Array<HTMLSelectElement | HTMLInputElement>)[2] as HTMLSelectElement).options = task.category;
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[3].value = task.dueDate;
 
             sessionStorage.setItem('editId', task.id);

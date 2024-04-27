@@ -47,9 +47,9 @@ class TaskValidator implements ValidatorInterface
             'name'
         )->message('A category with the given name already exists'); */
 
-        $v->rule('lengthMax', 'name', 15);
+        $v->rule('lengthMax', 'name', 25);
         $v->rule('lengthMin', 'description', 5);
-        $v->rule('lengthMax', 'description', 30);
+        $v->rule('lengthMax', 'description', 50);
 
         if (! $v->validate()) {
             throw new InvalidCredentialsException($v->errors());

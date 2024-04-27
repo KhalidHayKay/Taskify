@@ -28,4 +28,7 @@ return [
         'httpOnly' => true,
         'sameSite' => 'lax'
     ],
+    'mailer' => [
+        'dsn' => $_ENV['MAILER_DSN'],
+    ],
 ];
