@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\DTOs\DataTableQueryParams;
 use App\DTOs\TaskData;
 use App\Serilize;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Entity\Category;
-use App\Enums\TaskStatusEnum;
 use DateTime;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
+use function DI\string;
 
 class TaskProviderService
 {
@@ -45,6 +48,30 @@ class TaskProviderService
         return array_map(fn($task) => $this->serilize->task($task), $tasks);
     }
 
+    public function getPaginated(DataTableQueryParams $params): Paginator
+    {
+        // var_dump($params->orderBy);
+        $query = $this->entityManager->getRepository(Task::class)
+            ->createQueryBuilder('t')
+            ->setFirstResult($params->start)
+            ->setMaxResults($params->length);
+
+        $orderBy = in_array($params->orderBy, ['name', 'category', 'status', 'createdAt', 'dueDate']) ? $params->orderBy : 'createdAt';
+        $orderDir = in_array(strtolower($params->orderDir), ['asc', 'desc', '']) ? $params->orderDir : 'asc';
+
+        if ($orderBy) {
+            $query->orderBy('t.' . $orderBy, $orderDir);
+        }
+
+        if (! empty($params->searchTerm)) {
+            $query->where('t.name LIKE :name')->setParameter('name', '%' . addcslashes($params->searchTerm, '%_') . '%');
+        }
+
+        // var_dump($query->getQuery()->getSQL());
+
+        return new Paginator($query);
+    }
+
     public function get(int $id): array
     {
         $task = $this->entityManager->find(Task::class, $id);
@@ -68,6 +95,7 @@ class TaskProviderService
             ->setName($taskData->name)
             ->setDescription($taskData->description)
             ->setDueDate(new DateTime($taskData->dueDate))
+            ->setStatus($taskData->status)
             ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
         ;
 

@@ -22,12 +22,14 @@ class Modal
     public open(): void
     {
         this.modalBackground?.classList.remove('hidden');
+        this.modalBackground?.classList.add('flex');
         this.element?.classList.remove('hidden');
         this.focusInputs();
     }
 
     public close(): void
     {
+        this.modalBackground?.classList.remove('flex');
         this.modalBackground?.classList.add('hidden');
         this.element?.classList.add('hidden');
         this.clearInputs();

@@ -25,9 +25,25 @@ const elements = {
                         </div>
                     </div>
                 `
+            case 'completed':
+                return `
+                    <div class="py-1 text-gray-700 whitespace-nowrap">
+                        <div class="px-2 inline-flex items-center rounded-full bg-green-700">
+                            <span class="text-[0.7rem] text-center font-normal text-blue-50">${status}</span>
+                        </div>
+                    </div>
+                `
+            case 'overdue':
+                return `
+                    <div class="py-1 text-gray-700 whitespace-nowrap">
+                        <div class="px-2 inline-flex items-center rounded-full bg-red-500">
+                            <span class="text-[0.7rem] text-center font-normal text-blue-50">${status}</span>
+                        </div>
+                    </div>
+                `
             default:
                 return `
-                    <div class="px-2 py-1 text-gray-700 whitespace-nowrap">
+                    <div class="py-1 text-gray-700 whitespace-nowrap">
                         <div class="inline-flex items-center rounded-full bg-gray-200">
                             <span class="text-[0.7rem] text-center font-normal text-blue-50 px-2">${status}</span>
                         </div>

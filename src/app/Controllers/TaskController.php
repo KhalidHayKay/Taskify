@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\DTOs\DataTableQueryParams;
 use Slim\Views\Twig;
 use App\DTOs\TaskData;
 use App\ResponseFormatter;
 use App\Enums\TaskStatusEnum;
+use App\Serilize;
 use App\Services\CategoryProviderService;
+use App\Services\RequestService;
 use Doctrine\ORM\EntityManager;
 use App\Validators\TaskValidator;
 use App\Validators\ValidatorFactory;
@@ -25,6 +28,7 @@ class TaskController
         private readonly TaskProviderService $taskProvider,
         private readonly ResponseFormatter $responseFormatter,
         private readonly CategoryProviderService $categoryService,
+        private readonly RequestService $requestService,
     )
     {
     }
@@ -32,8 +36,6 @@ class TaskController
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $categories = $this->categoryService->getAll($request->getAttribute('user'));
-
-        // var_dump($categories);
 
         return $this->twig->render($response, 'task/task.twig', ['categories' => $categories]);
     }
@@ -47,12 +49,12 @@ class TaskController
 
     public function retrieveForTable(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $params = $request->getQueryParams();
-        $tasks = $this->taskProvider->getAll($request->getAttribute('user'));
+        $params = $this->requestService->getDataTableQueryParams($request);
+        $tasks = $this->taskProvider->getPaginated($params);
 
         return $this->responseFormatter->asJson($response, [
-            'data' => $tasks,
-            'draw' => (int) $params['draw'],
+            'data' => array_map(fn ($task) => (new Serilize())->task($task),(array) $tasks->getIterator()),
+            'draw' => $params->draw,
             'recordsTotal' => count($tasks),
             'recordsFiltered' => count($tasks),
         ])->withStatus(200);
@@ -70,8 +72,6 @@ class TaskController
         $data = $this->validatorFactory->resolve(TaskValidator::class)->validate(
             $request->getParsedBody()
         );
-
-        var_dump($data);
 
         $task = $this->taskProvider->create(new TaskData(
             $data['name'],
@@ -108,7 +108,7 @@ class TaskController
             $data['name'],
             $data['description'],
             $data['due_date'],
-            TaskStatusEnum::Scheduled,
+            TaskStatusEnum::Completed,
             (int) $data['category'],
             $request->getAttribute('user'),
         ));

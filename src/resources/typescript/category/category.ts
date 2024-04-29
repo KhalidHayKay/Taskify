@@ -33,6 +33,20 @@ const render = () => {
                 }
             })
         })
+
+        const count = res.length as number;
+        const countElement = document.querySelector('button#category-count>span#number') as HTMLSpanElement;
+        const openModalBtn = document.querySelector('#open-modal-btn');
+        
+        countElement.textContent = count.toString();
+
+        if (count >= 20) {
+            openModalBtn?.setAttribute('disabled', 'true');
+            openModalBtn?.classList.add('disabled');
+        } else {
+            openModalBtn?.removeAttribute('disabled');
+            openModalBtn?.classList.remove('disabled')
+        }
     })
 }
 

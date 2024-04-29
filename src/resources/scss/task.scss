@@ -3,3 +3,18 @@
 select {
     outline: none;
 }
+
+#tasks-table_wrapper {
+    padding-bottom: 50px !important;
+}
+
+.dt-layout-table {
+    height: calc(80vh - 150px) !important;
+    overflow: hidden;
+
+    .dt-layout-cell {
+        overflow-y: scroll;
+        height: 100%;
+    }
+
+}

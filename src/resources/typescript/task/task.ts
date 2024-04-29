@@ -1,4 +1,4 @@
-require("flatpickr/dist/themes/dark.css");
+import 'flatpickr/dist/themes/dark.css';
 import '../../scss/task.scss';
 import Modal from '../modal';
 import { del, get, post, put } from '../ajax';
@@ -11,14 +11,30 @@ const table = new DataTable('#tasks-table', {
     ajax: '/tasks/load',
     orderMulti: false,
     columns: [
-        { data: row => elements.name(row.name) },
-        { data: row => elements.category(row.category) },
-        { data: row => elements.status(row.status) },
-        { data: row => elements.dateTime(row.createdAt) },
-        { data: row => elements.dateTime(row.dueDate) },
+        { 
+            data: row => elements.name(row.name), 
+            name: 'name' 
+        },
+        { 
+            data: row => elements.category(row.category), 
+            name: 'category'
+        },
+        { 
+            data: row => elements.status(row.status), 
+            name: 'status'
+        },
+        { 
+            data: row => elements.dateTime(row.createdAt), 
+            name: 'createdAt'
+        },
+        { 
+            data: row => elements.dateTime(row.dueDate), 
+            name: 'dueDate'
+        },
         {
             orderable: false,
             data: row => elements.buttons(row.id),
+            name: 'actionButtons'
         }
     ],
 });

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\ResponseFormatter;
-use App\Serilize;
 use Slim\Views\Twig;
-use App\Services\CategoryProviderService;
+use App\ResponseFormatter;
 use Doctrine\ORM\EntityManager;
 use App\Validators\ValidatorFactory;
-use App\Validators\CategoryValidator;
 use Psr\Http\Message\ResponseInterface;
+use App\Services\CategoryProviderService;
+use App\Validators\CreateCategoryValidator;
+use App\Validators\UpdateCategoryValidator;
 use Psr\Http\Message\ServerRequestInterface;
 
 class CategoryController
@@ -47,8 +47,8 @@ class CategoryController
 
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate(
-            $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId()]
+        $data = $this->validatorFactory->resolve(CreateCategoryValidator::class)->validate(
+            $request->getParsedBody() + ['user' => $request->getAttribute('user')]
         );
 
         $category = $this->categoryProvider->create($data['name'], $request->getAttribute('user'));
@@ -65,8 +65,8 @@ class CategoryController
 
     public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $data = $this->validatorFactory->resolve(CategoryValidator::class)->validate(
-            $args + $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId(), 'isEdit' => true]
+        $data = $this->validatorFactory->resolve(UpdateCategoryValidator::class)->validate(
+            $args + $request->getParsedBody() + ['user' => $request->getAttribute('user')]
         );
 
         $this->categoryProvider->edit((int) $data['id'], $data['name']);

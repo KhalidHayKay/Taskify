@@ -19,3 +19,13 @@
 .container {
     max-height: calc(80vh - 70px) !important;
 }
+
+button#open-modal-btn.disabled {
+    background-color: #999;
+    &:hover {
+        background: #999;
+    }
+    &:focus {
+        background: #999;
+    }
+}
