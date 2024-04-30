@@ -1,5 +1,3 @@
-import { formatDate } from "date-fns";
-
 const element = (obj: {
     id: number
     name: string, 
@@ -21,8 +19,8 @@ const element = (obj: {
                     <h2 class="text-sm text-center font-normal text-blue-50 px-2">${obj.taskCount}</h2>
                 </div>
             </td>
-            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.createdAt, 'dd/MM/yy hh:mm aa')}</td>
-            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${formatDate(obj.updatedAt, 'dd/MM/yy hh:mm aa')}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${obj.createdAt}</td>
+            <td class="px-4 py-4 text-sm text-gray-500 whitespace-nowrap">${obj.updatedAt}</td>
             <td class="px-4 py-4 text-sm whitespace-nowrap">
                 <div class="flex items-center gap-x-10">
                     <button class="text-gray-500 transition-colors duration-200 hover:text-red-500 focus:outline-none" data-name="delete" data-id=${obj.id}>

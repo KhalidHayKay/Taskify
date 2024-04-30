@@ -9,7 +9,7 @@ select {
 }
 
 .dt-layout-table {
-    height: calc(80vh - 150px) !important;
+    height: calc(80vh - 130px) !important;
     overflow: hidden;
 
     .dt-layout-cell {
@@ -17,4 +17,43 @@ select {
         height: 100%;
     }
 
+}
+
+.dt-length {
+    label {
+        font-size: 15px;
+    }
+
+    select {
+        padding: 1px !important;
+    }
+}
+
+.dt-search {
+
+    label {
+        font-size: 15px;
+    }
+
+    input {
+        padding: 1px !important;
+        outline: none !important;
+    }
+}
+
+table {
+    th {
+        padding-top: 0 !important;
+    }
+}
+
+.dt-paging {
+
+    .dt-paging-button {
+        padding: 0.2em 0.7em !important;
+    }
+}
+
+#tasks-table_info {
+    font-size: 15px !important;
 }

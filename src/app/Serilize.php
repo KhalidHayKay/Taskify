@@ -14,8 +14,8 @@ class  Serilize
         return [
             'id' => $category->getId(),
             'name' => $category->getName(),
-            'createdAt' => $category->getCreatedAt()->format('Y-m-d H:i:s'),
-            'updatedAt' => $category->getUpdatedAt()->format('Y-m-d H:i:s'),
+            'createdAt' => $category->getCreatedAt()->format('d/m/Y h:i A'),
+            'updatedAt' => $category->getUpdatedAt()->format('d/m/Y h:i A'),
             'taskCount' => $category->getTasks()->count(),
         ];
     }
@@ -27,9 +27,9 @@ class  Serilize
             'name' => $task->getName(),
             'description' => $task->getDescription(),
             'status' => $task->getStatus(),
-            'createdAt' => $task->getCreatedAt()->format('d/m/y h:i A'),
-            'updatedAt' => $task->getUpdatedAt()->format('d/m/y h:i A'),
-            'dueDate' => $task->getDueDate()->format('d/m/y h:i A'),
+            'createdAt' => $task->getCreatedAt()->format('d/m/Y h:i A'),
+            'updatedAt' => $task->getUpdatedAt()->format('d/m/Y h:i A'),
+            'dueDate' => $task->getDueDate()->format('d/m/Y h:i A'),
             'category' => $task->getCategory()->getName(),
         ];
     }

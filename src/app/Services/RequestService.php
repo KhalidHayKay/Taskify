@@ -6,7 +6,6 @@ namespace App\Services;
 
 use App\DTOs\DataTableQueryParams;
 use App\Interfaces\SessionInterface;
-use App\Session;
 use Psr\Http\Message\ServerRequestInterface;
 
 class RequestService
@@ -35,7 +34,6 @@ class RequestService
     public function getDataTableQueryParams(ServerRequestInterface $request): DataTableQueryParams
     {
         $params = $request->getQueryParams();
-        // var_dump($params);
         
         if (array_key_exists('order', $params)) {
             $orderBy = $params['columns'][$params['order'][0]['column']]['name'];

@@ -48,7 +48,7 @@ let isEditMode = false;
 // DateTime picker
 flatpickr("#due-date", {
     enableTime: true,
-    dateFormat: "d-m-Y h:i K",
+    dateFormat: "d/m/Y h:i K",
     minDate: new Date(),
 });
 
@@ -78,6 +78,7 @@ modal.submitButton?.addEventListener('click', e => {
             if (res.ok) {
                 table.draw();
                 modal.close();
+                isEditMode = false;
             }
         });
     }
@@ -95,11 +96,20 @@ document.querySelector('#tasks-table')?.addEventListener('click', (e) => {
         get(`/tasks/${editBtn.dataset.id}`).then(res => res.json()).then(task => {
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[0].value = task.name;
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[1].value = task.description;
-            // ((modalInput as Array<HTMLSelectElement | HTMLInputElement>)[2] as HTMLSelectElement).options = task.category;
             (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[3].value = task.dueDate;
+
+            const selectElement = (modalInput as Array<HTMLSelectElement | HTMLInputElement>)[2] as HTMLSelectElement;
+            selectElement.querySelectorAll('option').forEach(option => {
+                option.removeAttribute('selected');
+                if (option.textContent === task.category) {
+                    option.selected = true;
+                }
+            })
 
             sessionStorage.setItem('editId', task.id);
             modal.open();
         })
     }
 })
+
+modal.cancelButton?.addEventListener('click', e => isEditMode = false)

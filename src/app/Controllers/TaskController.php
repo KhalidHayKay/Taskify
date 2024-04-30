@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\DTOs\DataTableQueryParams;
 use Slim\Views\Twig;
 use App\DTOs\TaskData;
 use App\ResponseFormatter;
@@ -77,7 +76,6 @@ class TaskController
             $data['name'],
             $data['description'],
             $data['due_date'],
-            TaskStatusEnum::Scheduled,
             (int) $data['category'],
             $request->getAttribute('user'),
         ));
@@ -108,7 +106,6 @@ class TaskController
             $data['name'],
             $data['description'],
             $data['due_date'],
-            TaskStatusEnum::Completed,
             (int) $data['category'],
             $request->getAttribute('user'),
         ));

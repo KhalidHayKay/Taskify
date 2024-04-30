@@ -10,11 +10,10 @@ use App\Serilize;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Entity\Category;
+use App\Enums\TaskStatusEnum;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-
-use function DI\string;
 
 class TaskProviderService
 {
@@ -29,11 +28,10 @@ class TaskProviderService
         $task
             ->setName($taskData->name)
             ->setDescription($taskData->description)
-            ->setDueDate(new DateTime($taskData->dueDate))
-            ->setStatus($taskData->status)
+            ->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
+            ->setStatus(TaskStatusEnum::Scheduled)
             ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
-            ->setUser($taskData->user)
-        ;
+            ->setUser($taskData->user);
 
         $this->entityManager->persist($task);
         $this->entityManager->flush();
@@ -50,7 +48,6 @@ class TaskProviderService
 
     public function getPaginated(DataTableQueryParams $params): Paginator
     {
-        // var_dump($params->orderBy);
         $query = $this->entityManager->getRepository(Task::class)
             ->createQueryBuilder('t')
             ->setFirstResult($params->start)
@@ -94,10 +91,8 @@ class TaskProviderService
         $task
             ->setName($taskData->name)
             ->setDescription($taskData->description)
-            ->setDueDate(new DateTime($taskData->dueDate))
-            ->setStatus($taskData->status)
-            ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
-        ;
+            ->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
+            ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
 
         $this->entityManager->flush();
     }

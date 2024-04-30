@@ -15,7 +15,6 @@ class TaskData
         public readonly string $name, 
         public readonly string $description, 
         public readonly string $dueDate, 
-        public readonly TaskStatusEnum $status, 
         public readonly int $categoryId, 
         public readonly User $user,
     )
