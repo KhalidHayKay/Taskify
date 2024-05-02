@@ -49,7 +49,7 @@ class TaskController
     public function retrieveForTable(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $params = $this->requestService->getDataTableQueryParams($request);
-        $tasks = $this->taskProvider->getPaginated($params);
+        $tasks = $this->taskProvider->getPaginated($params, $request->getAttribute('user')->getId());
 
         return $this->responseFormatter->asJson($response, [
             'data' => array_map(fn ($task) => (new Serilize())->task($task),(array) $tasks->getIterator()),

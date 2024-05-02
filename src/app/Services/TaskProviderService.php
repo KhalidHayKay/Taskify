@@ -46,10 +46,12 @@ class TaskProviderService
         return array_map(fn($task) => $this->serilize->task($task), $tasks);
     }
 
-    public function getPaginated(DataTableQueryParams $params): Paginator
+    public function getPaginated(DataTableQueryParams $params, int $userId): Paginator
     {
         $query = $this->entityManager->getRepository(Task::class)
             ->createQueryBuilder('t')
+            ->where('c.user = :user')->setParameter('user', $userId)
+            ->leftJoin('t.category', 'c')
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 
@@ -57,7 +59,11 @@ class TaskProviderService
         $orderDir = in_array(strtolower($params->orderDir), ['asc', 'desc', '']) ? $params->orderDir : 'asc';
 
         if ($orderBy) {
-            $query->orderBy('t.' . $orderBy, $orderDir);
+            if ($orderBy === 'category') {
+                $query->orderBy('c.name', $orderDir);
+            } else {
+                $query->orderBy('t.' . $orderBy, $orderDir);
+            }
         }
 
         if (! empty($params->searchTerm)) {
