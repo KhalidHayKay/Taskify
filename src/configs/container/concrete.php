@@ -27,10 +27,15 @@ use App\Enums\SessionSamesiteOptionEnum;
 use App\Interfaces\UserProviderInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
+use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\WebpackEncoreBundle\Asset\TagRenderer;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookup;
 use Symfony\WebpackEncoreBundle\Twig\EntryFilesTwigExtension;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\BodyRendererInterface;
 
 return [
     App::class => function(ContainerInterface $container) {
@@ -90,4 +95,10 @@ return [
         persistentTokenMode: true, 
         failureHandler: $csrf->failureHandler()
     ),
+    MailerInterface::class => function (Config $config) {
+        $transport = Transport::fromDsn($config->get('mailer.dsn'));
+
+        return new Mailer($transport);
+    },
+    BodyRendererInterface::class => fn (Twig $twig) => new BodyRenderer($twig->getEnvironment()),
 ];

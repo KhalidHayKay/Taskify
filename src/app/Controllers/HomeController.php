@@ -8,7 +8,6 @@ use App\Auth;
 use Slim\Views\Twig;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 
 class HomeController
 {

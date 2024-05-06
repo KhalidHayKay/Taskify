@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'db:get-name', description: 'prints the app\'s database')]
-class TestCommand extends Command
+class AppCommand extends Command
 {
     Public function __construct(private readonly EntityManager $em)
     {

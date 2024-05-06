@@ -6,6 +6,7 @@ use App\Controllers\HomeController;
 use App\Controllers\TaskController;
 use App\Middlewares\AuthMiddleware;
 use App\Controllers\CategoryController;
+use App\Controllers\MailController;
 use App\Middlewares\GuestMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -39,4 +40,6 @@ return function(App $app) {
         $task->delete('/{id:[0-9]+}', [TaskController::class, 'remove']);
         $task->put('/{id:[0-9]+}', [TaskController::class, 'update']);
     })->add(AuthMiddleware::class);
+
+    $app->get('/mail', [MailController::class, 'test'])->add(AuthMiddleware::class);;
 };

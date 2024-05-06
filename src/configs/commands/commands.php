@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Commands\TestCommand;
+use App\Commands\AppCommand;
+use App\Commands\DueTaskReminder;
 
 return [
-    TestCommand::class,
+    AppCommand::class,
+    DueTaskReminder::class
 ];
