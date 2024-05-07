@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './resources/typescript/app.ts')
     .addEntry('layout', './resources/typescript/layout.ts')
+    .addEntry('dashboard', './resources/typescript/dashboard.ts')
     .addEntry('category', './resources/typescript/category/category.ts')
     .addEntry('task', './resources/typescript/task/task.ts')
     .addEntry('auth_layout', './resources/typescript/auth/layout.ts')

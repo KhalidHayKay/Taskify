@@ -75,6 +75,16 @@ class TaskProviderService
         return new Paginator($query);
     }
 
+    public function getByStatus(int $userId, TaskStatusEnum $status)
+    {
+        $tasks = $this->entityManager->getRepository(Task::class)
+            ->createQueryBuilder('t')
+            ->where('t.user = :id')->setParameter('id', $userId)
+            ->andWhere('t.status = :status')->setParameter('status', $status);
+
+        return new Paginator($tasks);
+    }
+
     public function get(int $id): array
     {
         $task = $this->entityManager->find(Task::class, $id);

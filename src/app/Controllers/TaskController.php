@@ -83,12 +83,6 @@ class TaskController
         return $this->responseFormatter->asJson($response, $task)->withStatus(201);
     }
 
-    public function date(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        return $this->twig->render($response, 'date.twig');
-    }
-
-
     public function remove(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->taskProvider->delete((int) $args['id']);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Middlewares;
 
 use App\Interfaces\AuthInterface;
-use App\Interfaces\SessionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;

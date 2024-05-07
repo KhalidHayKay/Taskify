@@ -1,18 +1,65 @@
 {% extends "layout.twig" %}
 
+{% block title %}Dashboard{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard', null, '', {defer: true}) }}
+{% endblock %}
+
 {% block content %}
 
-    <div>
-        <div class="big-cards">
-            <div id="coming-up"></div>
-            <div id="taskify-calender"></div>
+    <div id="container">
+        <div id="tasks-display" class="flex justify-between gap-1">
+            <div id="immediate" class="w-[45%] h-full bg-white">
+                <div class="flex items-center gap-2 ml-3 mt-2">
+                    <div class="h-3.5 w-3.5 bg-green-500"></div>
+                    <h3 class="text-base font-medium">Next Task</h3>
+                </div>
+            </div>
+            <div id="comming-ups" class="w-[25%] h-full bg-white">
+                <div class="flex items-center gap-2 ml-3 mt-2">
+                    <div class="h-3.5 w-3.5 bg-blue-500"></div>
+                    <h3 class="text-base font-medium">Upcoming Tasks</h3>
+                </div>
+            </div>
+            <div id="priorities" class="w-[30%] h-full bg-white">
+                <div class="flex items-center gap-2 ml-3 mt-2">
+                    <div class="h-3.5 w-3.5 bg-red-400"></div>
+                    <h3 class="text-base font-medium">Top priorities</h3>
+                </div>
+            </div>
         </div>
-        <div id="statistic-cards">
-            <div class="small-card"></div>
-            <div class="small-card"></div>
-            <div class="small-card"></div>
-            <div class="small-card"></div>
-            <div class="small-card"></div>
+        <div id="monthly-report" class="flex justify-between gap-1">
+            <div class="w-full h-full bg-white">
+                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Total</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                    {{ stat.total }}
+                </div>
+            </div>
+            <div class="w-full h-full bg-white">
+                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Completed</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                    {{ stat.completed }}
+                </div>
+            </div>
+            <div class="w-full h-full bg-white">
+                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Overdue</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                    {{ stat.overdue }}
+                </div>
+            </div>
+            <div class="w-full h-full bg-white">
+                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">consistency</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                    {{ stat.consistency }}
+                </div>
+            </div>
         </div>
     </div>
 
