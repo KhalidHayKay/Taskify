@@ -1,5 +1,5 @@
 import '../scss/layout.scss';
-    
+
 const userMenuDiv = document.getElementById("userMenu");
 const userMenu = document.getElementById("userButton");
 

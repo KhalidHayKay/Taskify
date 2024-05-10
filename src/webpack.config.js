@@ -21,11 +21,11 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './resources/typescript/app.ts')
+    .addEntry('auth_layout', './resources/typescript/auth/layout.ts')
     .addEntry('layout', './resources/typescript/layout.ts')
     .addEntry('dashboard', './resources/typescript/dashboard.ts')
     .addEntry('category', './resources/typescript/category/category.ts')
     .addEntry('task', './resources/typescript/task/task.ts')
-    .addEntry('auth_layout', './resources/typescript/auth/layout.ts')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

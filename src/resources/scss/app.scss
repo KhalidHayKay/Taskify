@@ -1,23 +1,20 @@
-@import '~tailwindcss/tailwind';
-
-@import url(https://fonts.googleapis.com/css2?family=VT323&display=swap);
-@import url(https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=VT323&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Kode+Mono&family=VT323&display=swap);
 
 ::-webkit-scrollbar {
-    width: 5px; /* Width of the scrollbar */
+    width: 5px;
     transition: 2s;
 }
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color of the track */
+    background: #f1f1f1;
     border-radius: 30px;
 }
 ::-webkit-scrollbar-thumb {
-    background: #aaa; /* Color of the thumb */
+    background: #aaa;
     border-radius: 30px;
     cursor: pointer;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #999; /* Color of the thumb on hover */
+    background: #999;
 }
 
 html {

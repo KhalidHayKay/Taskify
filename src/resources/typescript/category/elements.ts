@@ -15,7 +15,7 @@ const element = (obj: {
                 </div>
             </td>
             <td class="px-10 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                <div class="inline-flex items-center p-2 rounded-full bg-blue-700">
+                <div class="inline-flex items-center p-2 rounded-full bg-blue-600">
                     <h2 class="text-sm text-center font-normal text-blue-50 px-2">${obj.taskCount}</h2>
                 </div>
             </td>
