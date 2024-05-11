@@ -23,6 +23,6 @@ class AuthMiddleware implements MiddlewareInterface
             return $handler->handle($request->withAttribute('user', $user));
         }
 
-        return $handler->handle($request)->withStatus(302)->withHeader('Location', '/login');
+        return $this->responseFactory->createResponse(302)->withHeader('Location', '/login');
     }
 }

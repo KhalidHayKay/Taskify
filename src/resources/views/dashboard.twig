@@ -17,46 +17,98 @@
     <div id="container">
         <div id="tasks-display" class="flex justify-between gap-1">
             <div id="immediate" class="w-[45%] h-full bg-white">
-                <div class="flex items-center gap-2 ml-3 mt-2">
-                    <div class="h-3.5 w-3.5 bg-green-500"></div>
-                    <h3 class="text-base font-medium">Next Task</h3>
+                <div class="flex items-center gap-2 ml-3 p-2">
+                    <span class="h-3 w-3 bg-blue-500 rounded-full"></span>
+                    <h3 class="text-base text-gray-700 font-medium">Next Task</h3>
+                </div>
+                <div class="flex flex-col items-center justify-center mt-16">
+                    <h2>{{ nextTask.name }}</h2>
+                    <p>{{ nextTask.dueDate }}</p>
+                    {% if nextTask.isPriority is same as(true) %}
+                        <p class="text-red-600">PRIORITY</p>
+                    {% endif %}
                 </div>
             </div>
-            <div id="comming-ups" class="w-[25%] h-full bg-white">
-                <div class="flex items-center gap-2 ml-3 mt-2">
-                    <div class="h-3.5 w-3.5 bg-blue-500"></div>
-                    <h3 class="text-base font-medium">Upcoming Tasks</h3>
+            <div id="comming-up" class="w-[55%] h-full bg-white">
+                <div class="flex">
+                    <div class="w-1/2 flex items-center gap-2 p-2">
+                        <span class="h-3 w-3 bg-green-700 rounded-full"></span>
+                        <h3 class="text-base text-gray-700 font-medium">Upcoming</h3>
+                    </div>
+                    <div class="w-1/2 flex items-center gap-2 p-2 ml-2">
+                        <h3 class="text-[0.8rem] text-red-700 font-medium">(priorities)</h3>
+                    </div>
                 </div>
-            </div>
-            <div id="priorities" class="w-[30%] h-full bg-white">
-                <div class="flex items-center gap-2 ml-3 mt-2">
-                    <div class="h-3.5 w-3.5 bg-red-400"></div>
-                    <h3 class="text-base font-medium">Top priorities</h3>
+                <div class="flex pt-2">
+                    <div class="w-1/2 flex flex-col items-center gap-1 px-2">
+                        {% if upcommingTasks %}
+                            {% for task in upcommingTasks %}
+                                <div class="h-12 w-full flex items-center bg-[#fefefe] rounded px-3 shadow">
+                                    <div class="text-green-900 mr-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <p class="text-sm text-gray-800">{{ task.name }}</p>
+                                        <p class="text-[0.7rem] text-gray-500">{{ task.dueDate }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="h-14 w-full mt-20 flex flex-col justify-center items-center">
+                                <p class="text-sm text-gray-700">---</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="w-1/2 flex flex-col items-center gap-1 px-2">
+                        {% if priorities %}
+                            {% for task in priorities %}
+                                <div class="h-12 w-full flex items-center bg-[#fcfcfc] rounded px-3 shadow">
+                                    <div class="text-red-300 mr-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <p class="text-sm text-gray-800">{{ task.name }}</p>
+                                        <p class="text-[0.7rem] text-gray-500">{{ task.dueDate }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="h-14 w-full mt-20 flex flex-col justify-center items-center">
+                                <p class="text-sm text-gray-700">---</p>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
+        
         <div id="monthly-report" class="flex justify-between gap-1">
             <div class="w-full h-full bg-white">
-                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Total</h3>
-                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Total</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
                     {{ stat.total }}
                 </div>
             </div>
             <div class="w-full h-full bg-white">
-                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Completed</h3>
-                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Completed</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
                     {{ stat.completed }}
                 </div>
             </div>
             <div class="w-full h-full bg-white">
-                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Overdue</h3>
-                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Overdue</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
                     {{ stat.overdue }}
                 </div>
             </div>
             <div class="w-full h-full bg-white">
-                <h3 class="bg-gray-500 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">consistency</h3>
-                <div class="flex items-center justify-center h-[70%] text-gray-800 text-4xl font-medium">
+                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">consistency</h3>
+                <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
                     {{ stat.consistency }}
                 </div>
             </div>

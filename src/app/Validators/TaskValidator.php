@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Validators;
 
-use App\Entity\Category;
-use App\Entity\User;
 use Valitron\Validator;
 use Doctrine\ORM\EntityManager;
 use App\Interfaces\ValidatorInterface;
@@ -48,8 +46,8 @@ class TaskValidator implements ValidatorInterface
         )->message('A category with the given name already exists'); */
 
         $v->rule('lengthMax', 'name', 25);
-        $v->rule('lengthMin', 'description', 5);
-        $v->rule('lengthMax', 'description', 50);
+        $v->rule('lengthMin', 'note', 5);
+        $v->rule('lengthMax', 'note', 50);
 
         if (! $v->validate()) {
             throw new InvalidCredentialsException($v->errors());

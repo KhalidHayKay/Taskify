@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Slim\App;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
@@ -39,6 +41,7 @@ return function(App $app) {
         $task->get('/{id:[0-9]+}', [TaskController::class, 'retrieve']);
         $task->delete('/{id:[0-9]+}', [TaskController::class, 'remove']);
         $task->put('/{id:[0-9]+}', [TaskController::class, 'update']);
+        $task->put('/priority/set/{id:[0-9]+}', [TaskController::class, 'setPriority']);
     })->add(AuthMiddleware::class);
 
     $app->get('/mail', [MailController::class, 'test'])->add(AuthMiddleware::class);;

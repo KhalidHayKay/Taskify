@@ -7,7 +7,6 @@ namespace App\Controllers;
 use Slim\Views\Twig;
 use App\DTOs\TaskData;
 use App\ResponseFormatter;
-use App\Enums\TaskStatusEnum;
 use App\Serilize;
 use App\Services\CategoryProviderService;
 use App\Services\RequestService;
@@ -74,10 +73,11 @@ class TaskController
 
         $task = $this->taskProvider->create(new TaskData(
             $data['name'],
-            $data['description'],
+            $data['note'],
             $data['due_date'],
             (int) $data['category'],
             $request->getAttribute('user'),
+            $data['priority']
         ));
 
         return $this->responseFormatter->asJson($response, $task)->withStatus(201);
@@ -98,11 +98,21 @@ class TaskController
 
         $this->taskProvider->edit((int) $data['id'], new TaskData(
             $data['name'],
-            $data['description'],
+            $data['note'],
             $data['due_date'],
             (int) $data['category'],
             $request->getAttribute('user'),
+            $data['priority']
         ));
+
+        return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
+    }
+
+    public function setPriority(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $data = $request->getParsedBody() + $args;
+
+        $this->taskProvider->editPriority((int) $data['id'], $data['priority']);
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

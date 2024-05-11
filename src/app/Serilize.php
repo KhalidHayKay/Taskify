@@ -25,8 +25,9 @@ class  Serilize
         return [
             'id' => $task->getId(),
             'name' => $task->getName(),
-            'description' => $task->getDescription(),
+            'note' => $task->getnote(),
             'status' => $task->getStatus(),
+            'isPriority' => $task->getIsPriority(),
             'createdAt' => $task->getCreatedAt()->format('d/m/Y h:i A'),
             'updatedAt' => $task->getUpdatedAt()->format('d/m/Y h:i A'),
             'dueDate' => $task->getDueDate()->format('d/m/Y h:i A'),

@@ -27,9 +27,10 @@ class TaskProviderService
 
         $task
             ->setName($taskData->name)
-            ->setDescription($taskData->description)
+            ->setnote($taskData->note)
             ->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
             ->setStatus(TaskStatusEnum::Scheduled)
+            ->setIsPriority($taskData->isPriority)
             ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId))
             ->setUser($taskData->user);
 
@@ -43,6 +44,41 @@ class TaskProviderService
     {
         $tasks = $this->entityManager->find(User::class, $user->getId())->getTasks()->toArray();
 
+        return array_map(fn($task) => $this->serilize->task($task), $tasks);
+    }
+
+    public function get(int $id): array
+    {
+        $task = $this->entityManager->find(Task::class, $id);
+
+        return $this->serilize->task($task);
+    }
+
+    public function getByStatus(int $userId, TaskStatusEnum $status)
+    {
+        $tasks = $this->entityManager->getRepository(Task::class)
+            ->createQueryBuilder('t')
+            ->where('t.user = :id')->setParameter('id', $userId)
+            ->andWhere('t.status = :status')->setParameter('status', $status);
+
+        return new Paginator($tasks);
+    }
+
+    public function getForDashboard(int $userId, TaskStatusEnum $status, ?bool $isPriority = null)
+    {
+        $query = $this->entityManager->getRepository(Task::class)
+            ->createQueryBuilder('t')
+            ->where('t.user = :id')->setParameter('id', $userId)
+            ->andWhere('t.status = :status')->setParameter('status', $status)
+            ->setMaxResults(5)
+            ->orderBy('t.dueDate', 'asc');
+        
+        if (! is_null($isPriority)) {
+            $query->andWhere('t.isPriority = :priority')->setParameter('priority', $isPriority);
+        }
+
+        $tasks = $query->getQuery()->getResult();
+            
         return array_map(fn($task) => $this->serilize->task($task), $tasks);
     }
 
@@ -70,26 +106,7 @@ class TaskProviderService
             $query->where('t.name LIKE :name')->setParameter('name', '%' . addcslashes($params->searchTerm, '%_') . '%');
         }
 
-        // var_dump($query->getQuery()->getSQL());
-
         return new Paginator($query);
-    }
-
-    public function getByStatus(int $userId, TaskStatusEnum $status)
-    {
-        $tasks = $this->entityManager->getRepository(Task::class)
-            ->createQueryBuilder('t')
-            ->where('t.user = :id')->setParameter('id', $userId)
-            ->andWhere('t.status = :status')->setParameter('status', $status);
-
-        return new Paginator($tasks);
-    }
-
-    public function get(int $id): array
-    {
-        $task = $this->entityManager->find(Task::class, $id);
-
-        return $this->serilize->task($task);
     }
 
     public function delete(int $id): void
@@ -106,9 +123,19 @@ class TaskProviderService
 
         $task
             ->setName($taskData->name)
-            ->setDescription($taskData->description)
+            ->setnote($taskData->note)
             ->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
+            ->setIsPriority($taskData->isPriority)
             ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
+
+        $this->entityManager->flush();
+    }
+
+    public function editPriority(int $id, bool $isPriority): void
+    {
+        $task = $this->entityManager->find(Task::class, $id);
+
+        $task->setIsPriority($isPriority);
 
         $this->entityManager->flush();
     }

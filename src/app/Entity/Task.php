@@ -27,7 +27,7 @@ class Task
     private string $name;
 
     #[Column]
-    private ?string $description;
+    private ?string $note;
 
     #[Column(name: 'created_at')]
     private DateTime $createdAt;
@@ -37,6 +37,9 @@ class Task
 
     #[Column(name: 'due_date')]
     private DateTime $dueDate;
+
+	#[Column()]
+	private bool $isPriority;
 
     #[Column]
     private TaskStatusEnum $status;
@@ -66,14 +69,14 @@ class Task
 		return $this;
 	}
 
-	public function getDescription(): ?string
+	public function getNote(): ?string
 	{
-		return $this->description;
+		return $this->note;
 	}
 
-	public function setDescription(?string $description): self
+	public function setNote(?string $note): self
 	{
-		$this->description = $description;
+		$this->note = $note;
 		return $this;
 	}
 
@@ -95,6 +98,17 @@ class Task
 	public function setDueDate(DateTime $dueDate): self
 	{
 		$this->dueDate = $dueDate;
+		return $this;
+	}
+
+	public function getIsPriority(): bool
+	{
+		return $this->isPriority;
+	}
+
+	public function setIsPriority(bool $isPriority): self
+	{
+		$this->isPriority = $isPriority;
 		return $this;
 	}
 

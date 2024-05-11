@@ -7,8 +7,6 @@
 
             <input type="text" name="name" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-4" placeholder="Name">
             {% include "errorDiv.twig" %}
-            <input type="text" name="description" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-400" placeholder="Description">
-            {% include "errorDiv.twig" %}
             <select name="category" id="category-dropdown" class="w-[300px] p-1 rounded text-[1rem] text-gray-500 outline-none border border-gray-200">
                 <option value="" class="text-sm text-gray-900" disabled selected>Category</option>
                 {% if categories %}
@@ -22,6 +20,12 @@
             {% include "errorDiv.twig" %}
             <input type="datetime-local" id="due-date" name="due_date" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-sm" placeholder="Due date">
             {% include "errorDiv.twig" %}
+            <input type="text" name="note" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-400" placeholder="Note">
+            {% include "errorDiv.twig" %}
+            <label for="priority" class="w-fit p-1 text-[0.9rem] cursor-pointer">
+                <input type="checkbox" name="priority" id="priority">
+                Mark as priotity
+            </label>
             
             <hr class="mt-5">
             <div class="text-right space-x-5 flex justify-end">

@@ -44,7 +44,12 @@ class Modal
                 inputElement.value = '';
             } else {
                 inputElement.forEach(input => {
-                    input.value = '';
+                    if (input.type === 'checkbox') {
+                        (<HTMLInputElement> input).checked = false;
+                        input.value = 'false';
+                    } else {
+                        input.value = '';
+                    }
                 });
             }
         }
