@@ -31,7 +31,7 @@ class HomeController
             'overdue' => count((array) $this->taskProvider->getByStatus($user->getId(), TaskStatusEnum::OverDue)->getIterator()),
             'consistency' => '0%'
         ];
-        $nextTask = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled)[0];
+        $nextTask = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled)[0] ?? null;
         $upcommingTasks = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled, false);
         $priorities = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled, true);
 
@@ -39,7 +39,7 @@ class HomeController
             'stat' => $stat,
             'upcommingTasks' => $upcommingTasks,
             'priorities' => $priorities,
-            'nextTask' => $nextTask ?? null,
+            'nextTask' => $nextTask,
         ]);
     }
 }

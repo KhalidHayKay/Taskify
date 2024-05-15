@@ -21,7 +21,7 @@ class UserProviderService implements UserProviderInterface
     {
         $user = new User;
         $user
-            ->setFullName($data->fullname)
+            ->setFullname($data->fullname)
             ->setUsername($data->username)
             ->setEmail($data->email)
             ->setPassword(password_hash($data->password, PASSWORD_BCRYPT, ['cost' => 12]))

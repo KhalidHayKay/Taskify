@@ -19,7 +19,6 @@ return function(App $app, ContainerInterface $container) {
     $app->add('csrf');
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
     $app->add(InvalidCredentialsExceptionMiddleware::class);
-    $app->add(TwigGlobalVariablesMiddleware::class);
     $app->add(OldFormDataMiddleware::class);
     $app->add(ValidationErrorsMIddleware::class);
     $app->add(SessionStartMiddleware::class);

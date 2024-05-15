@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\GeneratedValue;
 
 #[Entity()]
 #[Table(name: 'contact_persons')]
@@ -22,12 +23,13 @@ class ContactPerson
     private string $email;
 
     #[Column(name: 'full_name')]
-    private string $fullName;
+    private string $fullname;
 
     #[Column(name: 'is_user')]
     private bool $isUser;
 
-    #[OneToOne(mappedBy: 'contactPerson')]
+    #[OneToOne(inversedBy: 'contactPerson')]
+	#[JoinColumn(name: 'user_id')]
     private User $user;
 
 	public function getId(): int
@@ -46,14 +48,14 @@ class ContactPerson
 		return $this;
 	}
 
-	public function getFullName(): string
+	public function getFullname(): string
 	{
-		return $this->fullName;
+		return $this->fullname;
 	}
 
-	public function setFullName(string $fullName): self
+	public function setFullname(string $fullname): self
 	{
-		$this->fullName = $fullName;
+		$this->fullname = $fullname;
 		return $this;
 	}
 

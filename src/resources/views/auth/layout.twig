@@ -4,20 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
-        {{ encore_entry_link_tags('auth_layout') }}
     {% endblock %}
-
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-        {{ encore_entry_script_tags('auth_layout') }}
     {% endblock %}
-    
     <title>{% block title %} Auth {% endblock %}</title>
 </head>
-<body class="body-bg min-h-screen pt-12 md:pt-14 pb-10 px-2 md:px-0">
+<body class="bg-[#a8a8bb] min-h-screen pt-12 md:pt-14 pb-10 px-2 md:px-0">
     <header class="max-w-lg mx-auto" id="logo">
         <a href="" class=" flex items-center justify-center">
             <img class="w-14 h-14" src="{{ asset('build/images/logo.png') }}" alt="logo">

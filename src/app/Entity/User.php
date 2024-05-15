@@ -14,10 +14,8 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
-use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity()]
@@ -29,7 +27,7 @@ class User implements UserInterface
     private int $id;
 
     #[Column(name: 'full_name')]
-    private string $fullName;
+    private string $fullname;
 
     #[Column(unique: true)]
     private string $username;
@@ -37,14 +35,16 @@ class User implements UserInterface
     #[Column(unique: true)]
     private string $email;
 
+	#[Column('date_of_birth')]
+	private ?string $dateOfBirth;
+
     #[Column]
     private string $password;
 
     #[Column(name: 'created_at')]
     private DateTime $createdAt;
 
-    #[OneToOne(inversedBy: 'user')]
-	#[JoinColumn(name: 'contact_person_id')]
+    #[OneToOne(mappedBy: 'user')]
     private ?ContactPerson $contactPerson;
 
     #[OneToMany(targetEntity: Category::class, mappedBy: 'user')]
@@ -66,14 +66,14 @@ class User implements UserInterface
 		return $this->id;
 	}
 
-	public function getFullName(): string
+	public function getFullname(): string
 	{
-		return $this->fullName;
+		return $this->fullname;
 	}
 
-	public function setFullName(string $fullName): self
+	public function setFullname(string $fullname): self
 	{
-		$this->fullName = $fullName;
+		$this->fullname = $fullname;
 		return $this;
 	}
 
@@ -96,6 +96,17 @@ class User implements UserInterface
 	public function setEmail(string $email): self
 	{
 		$this->email = $email;
+		return $this;
+	}
+
+	public function getDateOfBirth(): string
+	{
+		return $this->dateOfBirth;
+	}
+
+	public function setDateOfBirth(string $dateOfBirth): self
+	{
+		$this->dateOfBirth = $dateOfBirth;
 		return $this;
 	}
 
