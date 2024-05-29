@@ -35,7 +35,7 @@ class User implements UserInterface
     #[Column(unique: true)]
     private string $email;
 
-	#[Column('date_of_birth')]
+	#[Column('date_of_birth', nullable: true)]
 	private ?string $dateOfBirth;
 
     #[Column]
@@ -99,12 +99,12 @@ class User implements UserInterface
 		return $this;
 	}
 
-	public function getDateOfBirth(): string
+	public function getDateOfBirth(): ?string
 	{
 		return $this->dateOfBirth;
 	}
 
-	public function setDateOfBirth(string $dateOfBirth): self
+	public function setDateOfBirth(?string $dateOfBirth): self
 	{
 		$this->dateOfBirth = $dateOfBirth;
 		return $this;

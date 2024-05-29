@@ -109,34 +109,40 @@ class TaskProviderService
         return new Paginator($query);
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $task = $this->entityManager->find(Task::class, $id);
 
         $this->entityManager->remove($task);
         $this->entityManager->flush();
+
+        return (bool) $task;
     }
 
-    public function edit(int $id, TaskData $taskData)
+    public function edit(int $id, TaskData $taskData): bool
     {
         $task = $this->entityManager->find(Task::class, $id);
 
         $task
-            ->setName($taskData->name)
-            ->setnote($taskData->note)
-            ->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
-            ->setIsPriority($taskData->isPriority)
-            ->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
+            ?->setName($taskData->name)
+            ?->setnote($taskData->note)
+            ?->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
+            ?->setIsPriority($taskData->isPriority)
+            ?->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
 
         $this->entityManager->flush();
+
+        return (bool) $task;
     }
 
-    public function editPriority(int $id, bool $isPriority): void
+    public function editPriority(int $id, bool $isPriority): bool
     {
         $task = $this->entityManager->find(Task::class, $id);
 
-        $task->setIsPriority($isPriority);
+        $task?->setIsPriority($isPriority);
 
         $this->entityManager->flush();
+
+        return (bool) $task;
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Validators;
 
-use App\Entity\ContactPerson;
 use Valitron\Validator;
+use App\Entity\ContactPerson;
 use Doctrine\ORM\EntityManager;
-use App\Interfaces\ValidatorInterface;
 use App\Exceptions\InvalidCredentialsException;
+use App\Interfaces\ValidatorInterface;
 
-class TaskValidator implements ValidatorInterface
+class SetPriorityValidator implements ValidatorInterface
 {
     public function __construct(private readonly EntityManager $entityManager)
     {
@@ -19,11 +19,7 @@ class TaskValidator implements ValidatorInterface
     public function validate(array $data): array
     {
         $v = new Validator($data);
-
-        $v->rule('required', ['name', 'due_date', 'category']);
-        $v->rule('lengthMax', 'name', 25);
-        $v->rule('lengthMin', 'note', 5);
-        $v->rule('lengthMax', 'note', 250);
+        
         $v->rule(
             function() use ($data) {
                 if ($data['priority'] === false) {

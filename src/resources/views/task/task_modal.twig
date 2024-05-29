@@ -20,10 +20,10 @@
             {% include "errorDiv.twig" %}
             <input type="datetime-local" id="due-date" name="due_date" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-sm" placeholder="Due date">
             {% include "errorDiv.twig" %}
-            <input type="text" name="note" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-400" placeholder="Note">
+            <input type="text" id="note" name="note" class="w-[300px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-400" placeholder="Note">
             {% include "errorDiv.twig" %}
             <label for="priority" class="w-fit p-1 text-[0.9rem] cursor-pointer">
-                <input type="checkbox" name="priority" id="priority">
+                <input type="checkbox" name="priority" id="priority" {#{% if user.hasContactPerson %} {% else %} disabled {% endif %}#}>
                 Mark as priotity
             </label>
             

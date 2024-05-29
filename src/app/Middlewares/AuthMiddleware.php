@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Middlewares;
 
 use App\Interfaces\AuthInterface;
+use App\Services\ContactPersonProviderService;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -18,6 +19,7 @@ class AuthMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly AuthInterface $auth,
         private readonly Twig $twig,
+        private readonly ContactPersonProviderService $contactPerson,
     )
     {   
     }
@@ -28,6 +30,7 @@ class AuthMiddleware implements MiddlewareInterface
             $this->twig->getEnvironment()->addGlobal('user', [
                 'name' => $user->getUsername(), 
                 'id' => $user->getId(),
+                'hasContactPerson' => (bool) $this->contactPerson->get($user),
             ]);
 
             return $handler->handle($request->withAttribute('user', $user));

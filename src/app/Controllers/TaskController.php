@@ -9,11 +9,13 @@ use App\DTOs\TaskData;
 use App\ResponseFormatter;
 use App\Serilize;
 use App\Services\CategoryProviderService;
+use App\Services\ContactPersonProviderService;
 use App\Services\RequestService;
 use Doctrine\ORM\EntityManager;
 use App\Validators\TaskValidator;
 use App\Validators\ValidatorFactory;
 use App\Services\TaskProviderService;
+use App\Validators\SetPriorityValidator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -68,7 +70,7 @@ class TaskController
     public function new(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $data = $this->validatorFactory->resolve(TaskValidator::class)->validate(
-            $request->getParsedBody()
+            $request->getParsedBody() + ['user' => $request->getAttribute('user')]
         );
 
         $task = $this->taskProvider->create(new TaskData(
@@ -76,7 +78,7 @@ class TaskController
             $data['note'],
             $data['due_date'],
             (int) $data['category'],
-            $request->getAttribute('user'),
+            $data['user'],
             $data['priority']
         ));
 
@@ -93,7 +95,7 @@ class TaskController
     public function update(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $data = $this->validatorFactory->resolve(TaskValidator::class)->validate(
-            $args + $request->getParsedBody() + ['user_id' => $request->getAttribute('user')->getId(), 'isEdit' => true]
+            $args + $request->getParsedBody() + ['user' => $request->getAttribute('user')]
         );
 
         $this->taskProvider->edit((int) $data['id'], new TaskData(
@@ -101,7 +103,7 @@ class TaskController
             $data['note'],
             $data['due_date'],
             (int) $data['category'],
-            $request->getAttribute('user'),
+            $data['user'],
             $data['priority']
         ));
 
@@ -110,9 +112,13 @@ class TaskController
 
     public function setPriority(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $data = $request->getParsedBody() + $args;
+        $data = $this->validatorFactory->resolve(SetPriorityValidator::class)->validate(
+            $request->getParsedBody() + $args + ['user' => $request->getAttribute('user')]
+        );
 
-        $this->taskProvider->editPriority((int) $data['id'], $data['priority']);
+        if (! $this->taskProvider->editPriority((int) $data['id'], $data['priority'])) {
+            return $response->withStatus(404);
+        };
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

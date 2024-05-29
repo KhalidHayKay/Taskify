@@ -1,5 +1,10 @@
 {% extends "layout.twig" %}
 
+{% block meta_tags %}
+    {{ parent() }}
+    <meta name="userHasContactPerson" content={% if user.hasContactPerson %} true {% else %} false {% endif %}>
+{% endblock %}
+
 {% block title %}Tasks{% endblock %}
 
 {% block stylesheets %}
@@ -28,6 +33,8 @@
         </div>
 
         <section class="container px-4 mx-auto mt-5 h-full">
+            {% include "task/task_note.twig" %}
+            
             <table id="tasks-table" class="{# DataTable styles #}stripe">
                 <thead>
                     <tr>

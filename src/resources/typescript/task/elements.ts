@@ -52,9 +52,9 @@ const elements = {
         }
     },
 
-    'priority': (priority: boolean, id: number) => `
+    'priority': (priority: boolean, id: number, hasContactPerson?: boolean) => `
         <div class="flex justify-center py-1 text-sm text-gray-500 whitespace-nowrap">
-            <input type="checkbox" name="priority" id="set-priority" class="cursor-pointer" ${priority ? 'checked' : ''} data-id=${id}>
+            <input type="checkbox" name="priority" id="set-priority" class="cursor-pointer" ${priority ? 'checked' : ''} ${! <boolean>hasContactPerson ? 'disabled' : ''} data-id=${id}>
         </div>
     `,
 

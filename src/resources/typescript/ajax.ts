@@ -1,4 +1,4 @@
-const ajax = (
+const ajax = async (
     url: string, 
     method?: string, 
     data?: {},
@@ -53,10 +53,19 @@ const handleValidationErrors = (errors?: [], domElement?: HTMLElement) => {
     if (errors && domElement) {
         for (const name in errors) {
             const element = domElement.querySelector(`input[name=${ name }], select[name=${ name }]`);
-            const errorDiv = element?.nextElementSibling as HTMLElement;
+            const errorDiv = element?.nextElementSibling;
 
             element?.classList.add('border-red-500');
-            errorDiv.textContent = errors[name][0];
+
+            if (errorDiv) {
+                errorDiv.textContent = errors[name][0];
+            } else {
+                alert(errors[name][0]);
+            }
+        }
+    } else if (errors && ! domElement) {
+        for (const name in errors) {
+            alert(errors[name][0]);
         }
     }
 }

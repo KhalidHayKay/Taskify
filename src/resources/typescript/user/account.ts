@@ -1,5 +1,5 @@
-import { formatISO } from 'date-fns';
 import '../../scss/user.scss';
+import { post } from '../ajax';
 
 const forms = document.querySelectorAll('form[id]');
 const anchorLinks = document.querySelectorAll("a[href^='#']");
@@ -41,7 +41,41 @@ window.addEventListener('scroll', () => {
 });
 
 forms.forEach(form => {
-    form.addEventListener('submit', e => e.preventDefault());
+    const inputs = form.querySelectorAll('input');
+
+    inputs.forEach(input => {
+        const editBtn = <HTMLElement> input.nextElementSibling;
+
+        if (input.value === '') {
+            editBtn.style.display = 'none';
+        } else {
+            input.disabled = true;
+        }
+
+        if (input.disabled) {
+            editBtn?.addEventListener('click', e => {
+                input.disabled = false;
+                input.focus();
+            })
+        }
+    })
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
 
 
+        let body: [] = [];
+        
+        inputs.forEach(input => {
+            // let key = input.name;
+            // let value = input.value;
+
+            // body[key]
+        })
+
+        post('/user/account/contact_person', body)
+    });
+
+
+    // console.log(inputs)
 });

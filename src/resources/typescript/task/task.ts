@@ -5,7 +5,9 @@ import { del, get, post, put } from '../ajax';
 import elements from './elements';
 import DataTable from 'datatables.net';
 import flatpickr from "flatpickr";
+import { strToBool } from '../helperFuntions';
 
+const hasContactPerson = (document.querySelector('meta[name=userHasContactPerson]') as HTMLMetaElement).content;
 const table = new DataTable('#tasks-table', {
     serverSide: true,
     ajax: '/tasks/load',
@@ -25,7 +27,7 @@ const table = new DataTable('#tasks-table', {
         },
         { 
             orderable: false,
-            data: row => elements.priority(row.isPriority, row.id), 
+            data: row => elements.priority(row.isPriority, row.id, strToBool(hasContactPerson)), 
             name: 'priority'
         },
         { 
@@ -107,15 +109,19 @@ modal.submitButton?.addEventListener('click', e => {
     }
 });
 
+const noteModal = new Modal((document.getElementById('note-modal') as HTMLElement));
+
 document.querySelector('#tasks-table')?.addEventListener('click', (e) => {
     const dispatcher = e.target as HTMLElement;
     const delBtn = dispatcher.closest('button[data-name=delete]') as HTMLElement;
     const editBtn = dispatcher.closest('button[data-name=edit]') as HTMLElement;
+    const viewBtn = dispatcher.closest('button[data-name=view]') as HTMLElement;
     const setPriorityBtn = dispatcher.closest('#set-priority') as HTMLInputElement;
-    console.log(setPriorityBtn)
 
     if (delBtn) {
-        del(`/tasks/${delBtn.dataset.id}`).then(() => table.draw());
+        if (confirm('This task will be deleted. Click OK to proceed.')) {
+            del(`/tasks/${delBtn.dataset.id}`).then(() => table.draw());
+        };
     } else if (editBtn) {
         isEditMode = true;
         get(`/tasks/${editBtn.dataset.id}`).then(res => res.json()).then(task => {
@@ -133,9 +139,23 @@ document.querySelector('#tasks-table')?.addEventListener('click', (e) => {
             sessionStorage.setItem('editId', task.id);
             modal.open();
         })
+    } else if (viewBtn) {
+        get(`tasks/${viewBtn.dataset.id}`).then(res => res.json()).then(task => {
+            if (task.note === '') {
+                task.note = 'Empty';
+            }
+
+            (noteModal.element.querySelector('p') as HTMLParagraphElement).textContent = task.note;
+            noteModal.open();
+        })
     } else if (setPriorityBtn) {
-        put(`/tasks/priority/set/${setPriorityBtn.dataset.id}`, {'priority': setPriorityBtn.checked});
-    }
+        put(`/tasks/priority/set/${setPriorityBtn.dataset.id}`, {'priority': setPriorityBtn.checked})
+            .then(res => {
+                if (! res.ok) {
+                    setPriorityBtn.checked = false;
+                }
+            });
+    };
 })
 
 modal.cancelButton?.addEventListener('click', () => isEditMode = false)

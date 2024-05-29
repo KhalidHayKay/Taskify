@@ -68,11 +68,13 @@ class Modal
         }
     }
 
-    public getInputFields(): HTMLInputElement | Array<HTMLInputElement | HTMLSelectElement>
+    public getInputFields(): HTMLInputElement | Array<HTMLInputElement | HTMLSelectElement> | null
     {
         const inputs = Array.from(this.element.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select'));
 
-        if (inputs.length === 1) {
+        if (inputs.length < 1) {
+            return null
+        } else if (inputs.length === 1) {
             return inputs[0] as HTMLInputElement;
         } else {
             return inputs;
