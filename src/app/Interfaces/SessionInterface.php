@@ -13,7 +13,7 @@ interface SessionInterface
     public function isActive(): bool;
 
     public function put(string $key, mixed $value): void;
-    
+
     public function get(string $key): mixed;
 
     public function remove(string $key): void;

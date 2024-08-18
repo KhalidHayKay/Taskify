@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Controllers\ContactPersonController;
+use App\Middlewares\InvalidContactPersonDataExceptionMiddleware;
 use Slim\App;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
@@ -9,13 +11,13 @@ use App\Controllers\TaskController;
 use App\Middlewares\AuthMiddleware;
 use App\Controllers\CategoryController;
 use App\Controllers\MailController;
-use App\Controllers\UserController;
 use App\Middlewares\GuestMiddleware;
+use Slim\Middleware\MethodOverrideMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
-return function(App $app) {
+return function (App $app) {
     $app->get('/', [HomeController::class, 'index'])->add(AuthMiddleware::class);
-    
+
     $app->group('', function (RouteCollectorProxy $guest) {
         $guest->get('/login', [AuthController::class, 'loginView']);
         $guest->get('/signup', [AuthController::class, 'signupView']);
@@ -23,10 +25,14 @@ return function(App $app) {
         $guest->post('/signup', [AuthController::class, 'signup']);
     })->add(GuestMiddleware::class);
 
-    $app->get('/user/account', [UserController::class, 'index'])->add(AuthMiddleware::class);
-    $app->post('/user/account/contact_person', [UserController::class, 'setContactPerson'])->add(AuthMiddleware::class);
-    
     $app->post('/logout', [AuthController::class, 'logout'])->add(AuthMiddleware::class);
+
+    $app->group('/user/contact_person', function (RouteCollectorProxy $group) {
+        $group->get('', [ContactPersonController::class, 'index']);
+        $group->post('', [ContactPersonController::class, 'create']);
+        $group->delete('', [ContactPersonController::class, 'delete']);
+        $group->put('', [ContactPersonController::class, 'edit']);
+    })->add(AuthMiddleware::class)->add(InvalidContactPersonDataExceptionMiddleware::class);
 
     $app->group('/categories', function (RouteCollectorProxy $categories) {
         $categories->get('', [CategoryController::class, 'index']);

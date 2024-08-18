@@ -54,28 +54,24 @@ class TaskProviderService
         return $this->serilize->task($task);
     }
 
-    public function getByStatus(int $userId, TaskStatusEnum $status)
+    public function getByStatus(User $user, TaskStatusEnum $status)
     {
         $tasks = $this->entityManager->getRepository(Task::class)
             ->createQueryBuilder('t')
-            ->where('t.user = :id')->setParameter('id', $userId)
+            ->where('t.user = :id')->setParameter('id', $user->getId())
             ->andWhere('t.status = :status')->setParameter('status', $status);
 
-        return new Paginator($tasks);
+        return (new Paginator($tasks))->getIterator();
     }
 
-    public function getForDashboard(int $userId, TaskStatusEnum $status, ?bool $isPriority = null)
+    public function getForDashboard(int $userId, TaskStatusEnum $status, int $max)
     {
         $query = $this->entityManager->getRepository(Task::class)
             ->createQueryBuilder('t')
             ->where('t.user = :id')->setParameter('id', $userId)
             ->andWhere('t.status = :status')->setParameter('status', $status)
-            ->setMaxResults(5)
+            ->setMaxResults(is_int($max) ? $max : null)
             ->orderBy('t.dueDate', 'asc');
-        
-        if (! is_null($isPriority)) {
-            $query->andWhere('t.isPriority = :priority')->setParameter('priority', $isPriority);
-        }
 
         $tasks = $query->getQuery()->getResult();
             

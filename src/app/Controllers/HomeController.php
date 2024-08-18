@@ -25,21 +25,22 @@ class HomeController
     {
         $user = $request->getAttribute('user');
 
+        $nextTasks = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled, max: 11);
+
         $stat = [
-            'total' => count($this->taskProvider->getAll($user)),
-            'completed' => count((array) $this->taskProvider->getByStatus($user->getId(), TaskStatusEnum::Completed)->getIterator()),
-            'overdue' => count((array) $this->taskProvider->getByStatus($user->getId(), TaskStatusEnum::OverDue)->getIterator()),
+            'total' => count($user->getTasks()),
+            'completed' => count((array) $this->taskProvider->getByStatus($user, TaskStatusEnum::Completed)),
+            'overdue' => count((array) $this->taskProvider->getByStatus($user, TaskStatusEnum::OverDue)),
             'consistency' => '0%'
         ];
-        $nextTask = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled)[0] ?? null;
-        $upcommingTasks = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled, false);
-        $priorities = $this->taskProvider->getForDashboard($user->getId(), TaskStatusEnum::Scheduled, true);
+
+        $nextTask = array_shift($nextTasks);
+        $upcommingTasks = $nextTasks;
 
         return $this->twig->render($response, 'dashboard.twig', [
             'stat' => $stat,
-            'upcommingTasks' => $upcommingTasks,
-            'priorities' => $priorities,
-            'nextTask' => $nextTask,
+            'upcomming' => $upcommingTasks,
+            'next' => $nextTask,
         ]);
     }
 }

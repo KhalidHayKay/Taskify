@@ -74,4 +74,13 @@ class ContactPerson
 	{
 		return $this->user;
 	}
+
+	public function setUser(User $user): self
+	{
+		$user->addContactPerson($this);
+
+		$this->user = $user;
+
+		return $this;
+	}
 }

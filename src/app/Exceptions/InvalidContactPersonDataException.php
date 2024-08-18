@@ -6,11 +6,11 @@ namespace App\Exceptions;
 
 use Throwable;
 
-class InvalidCredentialsException extends \RuntimeException
+class InvalidContactPersonDataException extends \RuntimeException
 {
     public function __construct(
         public readonly array $errors,
-        string $message = 'Invalid login/signup credentials',
+        string $message = 'Invalid contact person data',
         int $code = 422,
         ?Throwable $previous = null,
     ) {

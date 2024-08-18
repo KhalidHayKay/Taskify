@@ -22,15 +22,14 @@ use Psr\Http\Message\ServerRequestInterface;
 class TaskController
 {
     public function __construct(
-        private readonly Twig $twig, 
-        private readonly EntityManager $entityManager, 
+        private readonly Twig $twig,
+        private readonly EntityManager $entityManager,
         private readonly ValidatorFactory $validatorFactory,
         private readonly TaskProviderService $taskProvider,
         private readonly ResponseFormatter $responseFormatter,
         private readonly CategoryProviderService $categoryService,
         private readonly RequestService $requestService,
-    )
-    {
+    ) {
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -53,7 +52,7 @@ class TaskController
         $tasks = $this->taskProvider->getPaginated($params, $request->getAttribute('user')->getId());
 
         return $this->responseFormatter->asJson($response, [
-            'data' => array_map(fn ($task) => (new Serilize())->task($task),(array) $tasks->getIterator()),
+            'data' => array_map(fn($task) => (new Serilize())->task($task), (array) $tasks->getIterator()),
             'draw' => $params->draw,
             'recordsTotal' => count($tasks),
             'recordsFiltered' => count($tasks),
@@ -116,9 +115,10 @@ class TaskController
             $request->getParsedBody() + $args + ['user' => $request->getAttribute('user')]
         );
 
-        if (! $this->taskProvider->editPriority((int) $data['id'], $data['priority'])) {
+        if (!$this->taskProvider->editPriority((int) $data['id'], $data['priority'])) {
             return $response->withStatus(404);
-        };
+        }
+        ;
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

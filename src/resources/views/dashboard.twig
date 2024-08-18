@@ -22,64 +22,39 @@
                     <h3 class="text-base text-gray-700 font-medium">Next Task</h3>
                 </div>
                 <div class="flex flex-col items-center justify-center mt-16">
-                    <h2>{{ nextTask.name }}</h2>
-                    <p>{{ nextTask.dueDate }}</p>
-                    {% if nextTask.isPriority is same as(true) %}
-                        <p class="text-red-600">PRIORITY</p>
+                    <h2>{{ next.name }}</h2>
+                    <p>{{ next.dueDate }}</p>
+                    {% if next.isPriority is same as(true) %}
+                        <div class="w-5 h-5 flex items-center justify-center rounded-full border text-[0.8rem] border-red-400 text-red-400">
+                            <p>P</p>
+                        </div>
                     {% endif %}
                 </div>
             </div>
             <div id="comming-up" class="w-[55%] h-full bg-white">
-                <div class="flex">
-                    <div class="w-1/2 flex items-center gap-2 p-2">
-                        <span class="h-3 w-3 bg-green-700 rounded-full"></span>
-                        <h3 class="text-base text-gray-700 font-medium">Upcoming</h3>
-                    </div>
-                    <div class="w-1/2 flex items-center gap-2 p-2 ml-2">
-                        <h3 class="text-[0.8rem] text-red-700 font-medium">(priorities)</h3>
-                    </div>
+                <div class="w-1/2 flex items-center gap-2 p-2">
+                    <span class="h-3 w-3 bg-green-700 rounded-full"></span>
+                    <h3 class="text-base text-gray-700 font-medium">Upcoming</h3>
                 </div>
                 <div class="flex pt-2">
-                    <div class="w-1/2 flex flex-col items-center gap-1 px-2">
-                        {% if upcommingTasks %}
-                            {% for task in upcommingTasks %}
-                                <div class="h-12 w-full flex items-center bg-[#fefefe] rounded px-3 shadow">
-                                    <div class="text-green-900 mr-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
+                    <div class="w-full grid grid-rows-5 grid-cols-2 grid-flow-col gap-x-2 gap-y-1 px-2">
+                        {% if upcomming %}
+                            {% for task in upcomming %}
+                                <div class="h-12 w-full flex items-center justify-between bg-white rounded px-3 shadow-sm">
                                     <div class="flex flex-col">
-                                        <p class="text-sm text-gray-800">{{ task.name }}</p>
                                         <p class="text-[0.7rem] text-gray-500">{{ task.dueDate }}</p>
+                                        <p class="text-sm text-gray-800">{{ task.name }}</p>
                                     </div>
+                                    {% if task.isPriority %}
+                                        <div class="w-5 h-5 flex items-center justify-center rounded-full border text-[0.8rem] border-red-400 text-red-400">
+                                            <p>P</p>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
                         {% else %}
-                            <div class="h-14 w-full mt-20 flex flex-col justify-center items-center">
-                                <p class="text-sm text-gray-700">---</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                    
-                    <div class="w-1/2 flex flex-col items-center gap-1 px-2">
-                        {% if priorities %}
-                            {% for task in priorities %}
-                                <div class="h-12 w-full flex items-center bg-[#fcfcfc] rounded px-3 shadow">
-                                    <div class="text-red-300 mr-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <p class="text-sm text-gray-800">{{ task.name }}</p>
-                                        <p class="text-[0.7rem] text-gray-500">{{ task.dueDate }}</p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <div class="h-14 w-full mt-20 flex flex-col justify-center items-center">
-                                <p class="text-sm text-gray-700">---</p>
+                            <div class="m-16 text-sm text-center col-span-2">
+                                <p class="text-sm text-gray-300">Upcoming tasks are shown here</p>
                             </div>
                         {% endif %}
                     </div>
@@ -101,7 +76,15 @@
                 </div>
             </div>
             <div class="w-full h-full bg-white">
-                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Overdue</h3>
+                <div class="text-gray-600 font-bold tracking-widest py-0.5 px-2 mt-2 ml-1 text-center w-[85%] border-b">
+                    <h3 class=" text-left">Due</h3>
+                </div>
+                <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
+                    {{ stat.overdue }}
+                </div>
+            </div>
+            <div class="w-full h-full bg-white">
+                <h3 class="bg-gray-400 text-gray-50 py-0.5 px-2 mt-2 ml-2 font-medium text-sm text-center w-fit">Due</h3>
                 <div class="flex items-center justify-center h-[70%] text-gray-700 text-4xl font-medium">
                     {{ stat.overdue }}
                 </div>

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Slim\App;
+use Slim\Middleware\MethodOverrideMiddleware;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Psr\Container\ContainerInterface;
@@ -14,7 +15,8 @@ use App\Middlewares\ValidationErrorsMIddleware;
 use App\Middlewares\TwigGlobalVariablesMiddleware;
 use App\Middlewares\InvalidCredentialsExceptionMiddleware;
 
-return function(App $app, ContainerInterface $container) {
+return function (App $app, ContainerInterface $container) {
+    $app->add(MethodOverrideMiddleware::class);
     $app->add(CsrfFieldsMiddleware::class);
     $app->add('csrf');
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));

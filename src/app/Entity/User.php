@@ -126,17 +126,6 @@ class User implements UserInterface
 		return $this->createdAt;
 	}
 
-	public function getContactPerson(): ?ContactPerson
-	{
-		return $this->contactPerson;
-	}
-
-	public function setContactPerson(?ContactPerson $contactPerson): self
-	{
-		$this->contactPerson = $contactPerson;
-		return $this;
-	}
-
 	public function getTasks(): Collection
 	{
 		return $this->tasks;
@@ -160,8 +149,19 @@ class User implements UserInterface
     {
         $category->setUser($this);
         
-        $this->tasks->add($category);
+        $this->categories->add($category);
 
+        return $this;
+    }
+
+    public function getContactPerson(): ?ContactPerson
+    {
+        return $this->contactPerson;
+    }
+
+    public function addContactPerson(ContactPerson $contactPerson)
+    {
+        $this->contactPerson = $contactPerson;
         return $this;
     }
 }

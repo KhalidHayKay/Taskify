@@ -13,14 +13,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class OldFormDataMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly Twig $twig, private readonly SessionInterface $session)
-    {   
-    }
-    
+    public function __construct(private readonly Twig $twig, private readonly SessionInterface $session) {}
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($oldFormData = $this->session->getFlash('oldFormData')) {
             $this->twig->getEnvironment()->addGlobal('oldFormData', $oldFormData);
+        }
+
+        if ($oldContactPersonData = $this->session->getFlash('oldContactPersonData')) {
+            $this->twig->getEnvironment()->addGlobal('oldContactPersonData', $oldContactPersonData);
         }
 
         return $handler->handle($request);

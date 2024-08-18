@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
+use App\Exceptions\InvalidContactPersonDataException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use App\Exceptions\InvalidCredentialsException;
 use App\Interfaces\SessionInterface;
 use App\ResponseFormatter;
 use App\Services\RequestService;
 
-class InvalidCredentialsExceptionMiddleware implements MiddlewareInterface
+class InvalidContactPersonDataExceptionMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
@@ -27,23 +27,17 @@ class InvalidCredentialsExceptionMiddleware implements MiddlewareInterface
     {
         try {
             return $handler->handle($request);
-        } catch (InvalidCredentialsException $e) {
+        } catch (InvalidContactPersonDataException $e) {
             $response = $this->responseFactory->createResponse();
 
-            if ($this->requestService->isXHR($request)) {
-                return $this->responseFormatter->asJson($response->withStatus(422), $e->errors);
-            }
+            $referer = $this->requestService->getReferer($request);
 
-            $referer       = $this->requestService->getReferer($request);
-            $sensitiveData = [
-                'password',
-                'confirm_password',
-            ];
-
-            $oldCredentials = array_diff_key($request->getParsedBody(), array_flip($sensitiveData));
+            $oldData = $request->getParsedBody();
 
             $this->session->flash('validationErrors', $e->errors);
-            $this->session->flash('oldFormData', $oldCredentials);
+            $this->session->flash('oldContactPersonData', $oldData);
+
+            // var_dump($this->session->getFlash('validationErrors'), $this->session->getFlash('oldContactPersonData'));
 
             return $response->withHeader('Location', $referer)->withStatus(302);
         }

@@ -17,13 +17,12 @@ use Psr\Http\Message\ServerRequestInterface;
 class CategoryController
 {
     public function __construct(
-        private readonly Twig $twig, 
-        private readonly EntityManager $entityManager, 
+        private readonly Twig $twig,
+        private readonly EntityManager $entityManager,
         private readonly ValidatorFactory $validatorFactory,
         private readonly CategoryProviderService $categoryProvider,
         private readonly ResponseFormatter $responseFormatter
-    )
-    {
+    ) {
     }
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
