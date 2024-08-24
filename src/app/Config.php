@@ -6,13 +6,11 @@ namespace App;
 
 class Config
 {
-    public function __construct(private readonly array $configs)
-    {
-    }
+    public function __construct(private readonly array $configs) {}
 
     public function get(string $name, mixed $default = null): mixed
     {
-        $keys = explode('.', $name);
+        $keys  = explode('.', $name);
         $value = $this->configs;
 
         foreach ($keys as $nestedKey) {

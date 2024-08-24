@@ -10,13 +10,19 @@
 			{{ encore_entry_script_tags('app', null, '', {defer: true}) }}
 			{{ encore_entry_script_tags('contactPerson', null, '', {defer: true}) }}
 		{% endblock %}
-		<title>COntact Person</title>
+		<title>Contact Person</title>
 	</head>
 	<body>
 		<a href="/" class="bg-gray-900 text-gray-100 m-5 p-2 w-fit z-50 absolute rounded">
 			Home
 		</a>
 
-		{% include "contact_person/modal.twig" %}
+        <div class="flex fixed text-gray-500 items-center justify-center overflow-auto z-10 bg-black bg-opacity-40 left-0 right-0 top-0 bottom-0">
+            <div id="modal" class="block bg-white rounded-lg shadow-2xl p-6 sm:w-fit mx-10 transition ease duration-100 transform">
+                <h3 class="font-bold block text-xl mb-2 text-gray-600">Contact Person</h3>
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
 	</body>
 </html>

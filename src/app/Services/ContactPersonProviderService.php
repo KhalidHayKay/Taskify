@@ -35,19 +35,6 @@ class ContactPersonProviderService
         return $user->getContactPerson();
     }
 
-    public function update(User $user, ContactPersonData $contact)
-    {
-        $contactPerson = $user->getContactPerson();
-
-        $contactPerson
-            ->setEmail($contact->email)
-            ->setFullname($contact->fullname);
-
-        $this->entityManager->flush($contactPerson);
-
-        return $contactPerson;
-    }
-
     public function remove(User $user): void
     {
         $contactPerson = $user->getContactPerson();
@@ -61,5 +48,29 @@ class ContactPersonProviderService
 
             $this->entityManager->flush();
         }
+    }
+
+    public function accept(User $user)
+    {
+        $contactPerson = $user->getContactPerson();
+        $contactPerson->setHasAccepted(true);
+
+        $this->entityManager->flush();
+    }
+
+    public function checkAcknowledgement(User $user): bool
+    {
+        if (! $user->getContactPerson() || ! $user->getContactPerson()->getHasAccepted()) {
+            return true;
+        }
+
+        return $user->getContactPerson()->getIsAcknowledged();
+    }
+
+    public function setAcknowledgement(User $user): void
+    {
+        $user->getContactPerson()->setIsAcknowledged(true);
+
+        $this->entityManager->flush();
     }
 }

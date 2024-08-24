@@ -1,0 +1,31 @@
+{% extends "contactPerson/layout.twig" %}
+
+{% block content %}
+    <form action="/user/contact_person/create" method="POST" class="flex flex-col gap-4">
+        <hr class="mb-1">
+
+        {{ csrf_form | raw }}
+        <input type="text" name="fullname" 
+            class="w-[400px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-4" 
+            placeholder="Fullname"
+            value='{{oldContactPersonData.fullname}}'
+        >
+        <div id="error-div" class="text-red-500 text-center text-[0.7rem] mt-[-0.8rem]">{{validationErrors.fullname | first}}</div>
+        <input type="email" name="email" 
+            class="w-[400px] p-1 text-[1rem] rounded outline-none border border-gray-200 placeholder:text-gray-4" 
+            placeholder="Email"
+            value='{{oldContactPersonData.email}}'
+        >
+        <div id="error-div" class="text-red-500 text-center text-[0.7rem] mt-[-0.8rem]">{{validationErrors.email | first}}</div>
+
+        <hr class="mt-5">
+        <div class="text-right space-x-2 flex justify-end w-full">
+            <button id="save-btn" class="py-1 px-1.5 text-sm bg-green-800 text-white flex flex-row-reverse justify-center items-center gap-1 rounded-md transition-colors duration-150 ease-linear focus:outline-none font-bold hover:bg-green-900 active:bg-green-800">
+                Save
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -10,9 +10,7 @@ use App\Interfaces\SessionInterface;
 
 class Session implements SessionInterface
 {
-    public function __construct(private readonly SessionConfig $options)
-    {
-    }
+    public function __construct(private readonly SessionConfig $options) {}
 
     public function start(): void
     {
@@ -25,9 +23,9 @@ class Session implements SessionInterface
         }
 
         session_set_cookie_params([
-            'secure' => $this->options->secure,
+            'secure'   => $this->options->secure,
             'httponly' => $this->options->httpOnly,
-            'samesite' => $this->options->sameSite->value
+            'samesite' => $this->options->sameSite->value,
         ]);
 
         if (! empty($this->options->name)) {
@@ -51,7 +49,7 @@ class Session implements SessionInterface
     {
         return session_status() === PHP_SESSION_ACTIVE;
     }
-    
+
     public function put(string $key, mixed $value): void
     {
         $_SESSION[$key] = $value;

@@ -2,7 +2,7 @@
 
 {% block meta_tags %}
     {{ parent() }}
-    <meta name="userHasContactPerson" content={% if user.hasContactPerson %} true {% else %} false {% endif %}>
+    <meta name="userHasContactPerson" content={% if hasContactPerson %} true {% else %} false {% endif %}>
 {% endblock %}
 
 {% block title %}Tasks{% endblock %}
@@ -29,11 +29,11 @@
             </button>
     
             <!-- Modal -->
-            {% include "task/task_modal.twig" %}
+            {% include "task/modal.twig" %}
         </div>
 
         <section class="container px-4 mx-auto mt-5 h-full">
-            {% include "task/task_note.twig" %}
+            {% include "task/note.twig" %}
             
             <table id="tasks-table" class="{# DataTable styles #}stripe">
                 <thead>

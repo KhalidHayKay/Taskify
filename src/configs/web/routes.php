@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-use App\Controllers\ContactPersonController;
-use App\Middlewares\InvalidContactPersonDataExceptionMiddleware;
 use Slim\App;
 use App\Controllers\AuthController;
 use App\Controllers\HomeController;
 use App\Controllers\TaskController;
-use App\Middlewares\AuthMiddleware;
 use App\Controllers\CategoryController;
+use App\Controllers\ContactPersonController;
 use App\Controllers\MailController;
+use App\Middlewares\AuthMiddleware;
 use App\Middlewares\GuestMiddleware;
-use Slim\Middleware\MethodOverrideMiddleware;
+use App\Middlewares\InvalidContactPersonDataExceptionMiddleware;
+use App\Middlewares\SignatureValidationMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
@@ -27,12 +27,22 @@ return function (App $app) {
 
     $app->post('/logout', [AuthController::class, 'logout'])->add(AuthMiddleware::class);
 
-    $app->group('/user/contact_person', function (RouteCollectorProxy $group) {
-        $group->get('', [ContactPersonController::class, 'index']);
-        $group->post('', [ContactPersonController::class, 'create']);
-        $group->delete('', [ContactPersonController::class, 'delete']);
-        $group->put('', [ContactPersonController::class, 'edit']);
+    $app->group('/user/contact_person', function (RouteCollectorProxy $contactPerson) {
+        $contactPerson->get('', [ContactPersonController::class, 'index']);
+        $contactPerson->get('/create', [ContactPersonController::class, 'createView']);
+        $contactPerson->post('/create', [ContactPersonController::class, 'create']);
+        $contactPerson->delete('', [ContactPersonController::class, 'delete']);
+
+        $contactPerson->get('/acknowledgement', [ContactPersonController::class, 'checkAcknowledgement']);
+        $contactPerson->post('/acknowledgement', [ContactPersonController::class, 'acknowledge']);
     })->add(AuthMiddleware::class)->add(InvalidContactPersonDataExceptionMiddleware::class);
+
+    //todo: Check to see if not adding auth middleware will not be a security risk
+    $app->group('/request', function (RouteCollectorProxy $guest) {
+        $guest->get('/contact_person/{userId}/{hash}', [ContactPersonController::class, 'request'])
+            ->setName('contactPersonRequest')
+            ->add(SignatureValidationMiddleware::class);
+    });
 
     $app->group('/categories', function (RouteCollectorProxy $categories) {
         $categories->get('', [CategoryController::class, 'index']);
@@ -54,5 +64,9 @@ return function (App $app) {
         $task->put('/priority/set/{id:[0-9]+}', [TaskController::class, 'setPriority']);
     })->add(AuthMiddleware::class);
 
-    $app->get('/mail', [MailController::class, 'test'])->add(AuthMiddleware::class);
+    $app->group('/mail', function (RouteCollectorProxy $mail) {
+        $mail->get('', [MailController::class, 'view']);
+        $mail->get('/test', [MailController::class, 'test']);
+        $mail->get('/test/view', [MailController::class, 'viewTest']);
+    })->add(AuthMiddleware::class);
 };

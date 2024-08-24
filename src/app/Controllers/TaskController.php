@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use Slim\Views\Twig;
 use App\DTOs\TaskData;
+use App\Entity\User;
 use App\ResponseFormatter;
 use App\Serilize;
 use App\Services\CategoryProviderService;
@@ -29,14 +30,24 @@ class TaskController
         private readonly ResponseFormatter $responseFormatter,
         private readonly CategoryProviderService $categoryService,
         private readonly RequestService $requestService,
-    ) {
-    }
+    ) {}
 
     public function index(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $categories = $this->categoryService->getAll($request->getAttribute('user'));
+        /**
+         * @var User $user
+         */
+        $user       = $request->getAttribute('user');
+        $categories = $this->categoryService->getAll($user);
 
-        return $this->twig->render($response, 'task/task.twig', ['categories' => $categories]);
+        return $this->twig->render(
+            $response,
+            'task/index.twig',
+            [
+                'categories'       => $categories,
+                'hasContactPerson' => ($user->getContactPerson() && $user->getContactPerson()?->getHasAccepted()),
+            ]
+        );
     }
 
     public function retrieveAll(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
@@ -49,12 +60,12 @@ class TaskController
     public function retrieveForTable(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         $params = $this->requestService->getDataTableQueryParams($request);
-        $tasks = $this->taskProvider->getPaginated($params, $request->getAttribute('user')->getId());
+        $tasks  = $this->taskProvider->getPaginated($params, $request->getAttribute('user')->getId());
 
         return $this->responseFormatter->asJson($response, [
-            'data' => array_map(fn($task) => (new Serilize())->task($task), (array) $tasks->getIterator()),
-            'draw' => $params->draw,
-            'recordsTotal' => count($tasks),
+            'data'            => array_map(fn ($task) => (new Serilize())->task($task), (array) $tasks->getIterator()),
+            'draw'            => $params->draw,
+            'recordsTotal'    => count($tasks),
             'recordsFiltered' => count($tasks),
         ])->withStatus(200);
     }
@@ -115,10 +126,9 @@ class TaskController
             $request->getParsedBody() + $args + ['user' => $request->getAttribute('user')]
         );
 
-        if (!$this->taskProvider->editPriority((int) $data['id'], $data['priority'])) {
+        if (! $this->taskProvider->editPriority((int) $data['id'], $data['priority'])) {
             return $response->withStatus(404);
         }
-        ;
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200);
     }

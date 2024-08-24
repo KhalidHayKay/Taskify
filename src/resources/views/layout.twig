@@ -25,7 +25,7 @@
 	<body class="bg-[#f6f6f6] h-[100vh] px-5 lg:px-[5rem]">
 		<header class="grid py-2 sm:py-3 lg:py-5">
 			<div id="logo" class="w-1/4 ml-2">
-				<a class="flex items-center text-gray-700 text-2xl md:text-3xl lg:text-4xl tracking-wider no-underline hover:no-underline font-bold" href="">
+				<a class="flex items-center text-gray-700 text-2xl md:text-3xl lg:text-4xl tracking-wider no-underline hover:no-underline font-bold" href="/">
 					<img class="w-8 h-8 md:h-10 md:w-10 lg:h-12 lg:w-12" src="{{ asset('build/images/logo.png') }}" alt="logo">
 					<span class="md:ml-[-2px] lg:ml-[-5px]">Task<span class="text-blue-700">ify</span>
 					</span>
@@ -93,7 +93,7 @@
 							<hr class="border-t mx-2 border-gray-400">
 						</li>
 						<li>
-							<form action="/logout" method="POST" href="#" class="block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">
+							<form action="/logout" method="POST" href="#" id="logout-btn" class="block text-gray-900 hover:bg-gray-400 no-underline hover:no-underline">
 								{{ csrf_form | raw }}
 								<button class="w-full py-2">Logout</button>
 							</form>

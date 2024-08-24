@@ -20,17 +20,14 @@ class AuthMiddleware implements MiddlewareInterface
         private readonly AuthInterface $auth,
         private readonly Twig $twig,
         private readonly ContactPersonProviderService $contactPerson,
-    )
-    {   
-    }
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($user = $this->auth->user()) {
             $this->twig->getEnvironment()->addGlobal('user', [
-                'name' => $user->getUsername(), 
-                'id' => $user->getId(),
-                'hasContactPerson' => (bool) $this->contactPerson->get($user),
+                'name' => $user->getUsername(),
+                'id'   => $user->getId(),
             ]);
 
             return $handler->handle($request->withAttribute('user', $user));

@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 class ResponseFormatter
 {
     public function asJson(
-        ResponseInterface $response, 
+        ResponseInterface $response,
         mixed $data,
         int $flags = JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS | JSON_THROW_ON_ERROR
     ): ResponseInterface {

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
-use App\Exceptions\SessionException;
 use App\Interfaces\SessionInterface;
 use App\Services\RequestService;
-use Doctrine\ORM\Query\Expr\Func;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,9 +13,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SessionStartMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly SessionInterface $session, private readonly RequestService $requestService)
-    {
-    }
+    public function __construct(private readonly SessionInterface $session, private readonly RequestService $requestService) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

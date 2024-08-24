@@ -17,10 +17,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class TaskProviderService
 {
-    public function __construct(private readonly EntityManager $entityManager, private readonly Serilize $serilize)
-    {
-    }
-    
+    public function __construct(private readonly EntityManager $entityManager, private readonly Serilize $serilize) {}
+
     public function create(TaskData $taskData): array
     {
         $task = new Task;
@@ -44,7 +42,7 @@ class TaskProviderService
     {
         $tasks = $this->entityManager->find(User::class, $user->getId())->getTasks()->toArray();
 
-        return array_map(fn($task) => $this->serilize->task($task), $tasks);
+        return array_map(fn ($task) => $this->serilize->task($task), $tasks);
     }
 
     public function get(int $id): array
@@ -64,7 +62,7 @@ class TaskProviderService
         return (new Paginator($tasks))->getIterator();
     }
 
-    public function getForDashboard(int $userId, TaskStatusEnum $status, int $max)
+    public function getForDashboard(int $userId, TaskStatusEnum $status, int $max): array
     {
         $query = $this->entityManager->getRepository(Task::class)
             ->createQueryBuilder('t')
@@ -74,8 +72,8 @@ class TaskProviderService
             ->orderBy('t.dueDate', 'asc');
 
         $tasks = $query->getQuery()->getResult();
-            
-        return array_map(fn($task) => $this->serilize->task($task), $tasks);
+
+        return array_map(fn ($task) => $this->serilize->task($task), $tasks);
     }
 
     public function getPaginated(DataTableQueryParams $params, int $userId): Paginator
@@ -87,7 +85,7 @@ class TaskProviderService
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 
-        $orderBy = in_array($params->orderBy, ['name', 'category', 'status', 'createdAt', 'dueDate']) ? $params->orderBy : 'createdAt';
+        $orderBy  = in_array($params->orderBy, ['name', 'category', 'status', 'createdAt', 'dueDate']) ? $params->orderBy : 'createdAt';
         $orderDir = in_array(strtolower($params->orderDir), ['asc', 'desc', '']) ? $params->orderDir : 'asc';
 
         if ($orderBy) {
@@ -120,11 +118,11 @@ class TaskProviderService
         $task = $this->entityManager->find(Task::class, $id);
 
         $task
-            ?->setName($taskData->name)
-            ?->setnote($taskData->note)
-            ?->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
-            ?->setIsPriority($taskData->isPriority)
-            ?->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
+                ?->setName($taskData->name)
+                ?->setnote($taskData->note)
+                ?->setDueDate((new DateTime())->createFromFormat('d/m/Y h:i A', $taskData->dueDate))
+                ?->setIsPriority($taskData->isPriority)
+                ?->setCategory($this->entityManager->find(Category::class, $taskData->categoryId));
 
         $this->entityManager->flush();
 
@@ -140,5 +138,15 @@ class TaskProviderService
         $this->entityManager->flush();
 
         return (bool) $task;
+    }
+
+    /**
+     * Checks if user's Contact Person has accepted their request
+     */
+    public function canBePriority(User $user): bool
+    {
+        $contactPerson = $user->getContactPerson();
+
+        return (bool) ($contactPerson && $contactPerson?->getHasAccepted());
     }
 }

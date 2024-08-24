@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
@@ -11,26 +12,41 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\PrePersist;
 
 #[Entity()]
 #[Table(name: 'contact_persons')]
+#[HasLifecycleCallbacks()]
 class ContactPerson
 {
-    #[Id, Column(options: ['unsigned' => true]), GeneratedValue()]
-    private int $id;
+	#[Id, Column(options: ['unsigned' => true]), GeneratedValue()]
+	private int $id;
 
-    #[Column(unique: true)]
-    private string $email;
+	#[Column(unique: true)]
+	private string $email;
 
-    #[Column(name: 'full_name')]
-    private string $fullname;
+	#[Column(name: 'full_name')]
+	private string $fullname;
 
-    #[Column(name: 'is_user')]
-    private bool $isUser;
+	#[Column(name: 'is_user')]
+	private bool $isUser;
 
-    #[OneToOne(inversedBy: 'contactPerson')]
+	#[Column('has_accepted')]
+	private bool $hasAccepted;
+
+	#[Column('is_acknowledged')]
+	private bool $isAcknowledged;
+
+	#[OneToOne(inversedBy: 'contactPerson')]
 	#[JoinColumn(name: 'user_id')]
-    private User $user;
+	private User $user;
+
+	#[PrePersist()]
+	public function setHasAcceptedAndIsAcknowlegded()
+	{
+		$this->hasAccepted    = false;
+		$this->isAcknowledged = false;
+	}
 
 	public function getId(): int
 	{
@@ -81,6 +97,27 @@ class ContactPerson
 
 		$this->user = $user;
 
+		return $this;
+	}
+	public function getHasAccepted(): bool
+	{
+		return $this->hasAccepted;
+	}
+
+	public function setHasAccepted(bool $hasAccepted): self
+	{
+		$this->hasAccepted = $hasAccepted;
+		return $this;
+	}
+
+	public function getIsAcknowledged(): bool
+	{
+		return $this->isAcknowledged;
+	}
+
+	public function setIsAcknowledged(bool $isAcknowledged): self
+	{
+		$this->isAcknowledged = $isAcknowledged;
 		return $this;
 	}
 }
