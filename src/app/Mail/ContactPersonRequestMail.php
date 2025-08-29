@@ -35,11 +35,11 @@ class ContactPersonRequestMail
             ->subject('Request to be a Contact Person')
             ->htmlTemplate('mail/contactPersonRequest.twig')
             ->context([
-                'requestUrl'    => $requestUrl,
-                'user'          => [
+                'request_url'    => $requestUrl,
+                'user'           => [
                     'fullname' => $user->getFullname(),
                 ],
-                'contactPerson' => [
+                'contact_person' => [
                     'fullname' => $contactPerson->getFullname(),
                 ],
             ]);

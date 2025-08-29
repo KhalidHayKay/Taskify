@@ -1,34 +1,45 @@
-FROM php:8.3.4-fpm
+# Stage 1: Composer deps
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY src/composer.json src/composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
 
-ARG USER
-ARG USER_ID
-ARG GROUP_ID
+# Stage 2: Node build
+FROM node:18-alpine AS frontend
+WORKDIR /app
+COPY src/package.json src/package-lock.json ./
+RUN npm install
+COPY src/ ./
+RUN npm run build
 
-RUN apt-get update && apt-get install -y \
-    git \
-    zip \
-    unzip \
-    curl \
-    vim \
-    libicu-dev
+# Stage 3: Final PHP + Nginx
+FROM php:8.3-fpm-alpine
 
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash \
-&& apt-get install nodejs -y
+# Install system deps
+RUN apk add --no-cache \
+    git unzip curl icu-dev libpng-dev libxml2-dev oniguruma-dev bash nginx supervisor
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install pdo pdo_mysql intl
-
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
-
-COPY xdebug.ini "${PHP_INI_DIR}/conf.d"
-
-RUN groupadd --force -g $GROUP_ID $USER
-RUN useradd -ms /bin/bash --no-user-group -g $GROUP_ID -u 1337 $USER
-RUN usermod -u $USER_ID $USER
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql intl gd
 
 WORKDIR /var/www
 
-USER $USER
+# Copy application code
+COPY src/ ./
+
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www
+
+# Copy Composer vendor
+COPY --from=vendor /app/vendor ./vendor
+
+# Copy built frontend
+COPY --from=frontend /app/public/build ./public/build
+
+# Copy Nginx + entrypoint
+COPY docker/nginx/prod.conf /etc/nginx/nginx.conf
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
+
+EXPOSE 80
+CMD ["/start.sh"]

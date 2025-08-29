@@ -1,0 +1,32 @@
+FROM php:8.3-fpm-alpine
+
+ARG USER
+ARG USER_ID
+ARG GROUP_ID
+
+RUN apk add --no-cache \
+    git \
+    zip \
+    unzip \
+    curl \
+    vim \
+    icu-dev \
+    nodejs \
+    npm \  
+    $PHPIZE_DEPS
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install pdo pdo_mysql intl
+
+RUN apk add --no-cache php83-pecl-xdebug
+
+COPY xdebug.ini "${PHP_INI_DIR}/conf.d"
+
+RUN addgroup -g $GROUP_ID $USER \
+    && adduser -D -u $USER_ID -G $USER -s /bin/bash $USER
+
+WORKDIR /var/www
+
+USER $USER
